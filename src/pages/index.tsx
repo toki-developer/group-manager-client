@@ -1,5 +1,7 @@
-import Head from "next/head";
+import { Layout } from "src/components/layout";
 
-export default function Home() {
-  return <div>Hello World</div>;
-}
+const IndexPage = () => {
+  return <Layout>home</Layout>;
+};
+
+export default IndexPage;
