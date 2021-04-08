@@ -1,16 +1,13 @@
-
 import { Icon } from "src/components/shared/Icon";
-import {EXAMPLE_GROUP_1} from "src/sampleModels/group"
-
+import { EXAMPLE_GROUP_1 } from "src/sampleModels/group";
 
 const group = EXAMPLE_GROUP_1;
 
 type Props = {
   title: string;
-}
+};
 
-
-export const Top = (props:Props) => {
+export const Top = (props: Props) => {
   return (
     <div
       className={

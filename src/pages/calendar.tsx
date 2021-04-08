@@ -1,4 +1,4 @@
-import { Layout } from "src/components/layout";
+import { Layout } from "src/components/Layout";
 import { Top } from "src/components/Top";
 
 const calendar = () => {
