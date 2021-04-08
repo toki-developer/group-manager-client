@@ -1,6 +1,5 @@
-import { Layout } from "src/components/Layout";
+import { Layout } from "src/components/layout";
 import { Top } from "src/components/Top";
-
 
 const calendar = () => {
   return (

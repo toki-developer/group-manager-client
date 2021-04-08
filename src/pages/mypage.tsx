@@ -1,10 +1,10 @@
-import { Layout } from "src/components/Layout";
+import { Layout } from "src/components/layout";
 import { Top } from "src/components/Top";
 
 const mypage = () => {
   return (
     <Layout>
-      <Top title="マイページ"/>
+      <Top title="マイページ" />
       <div>mypageです</div>
       <div>test中</div>
       <br />
