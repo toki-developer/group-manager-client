@@ -5,6 +5,7 @@ const mypage = () => {
   return (
     <Layout>
       <Top title="マイページ" />
+      <div>マイページ</div>
     </Layout>
   );
 };

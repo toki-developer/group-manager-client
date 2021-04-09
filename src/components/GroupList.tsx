@@ -15,6 +15,7 @@ const GET_GROUPS_QUERY = gql`
 
 export const GroupList = () => {
   const { data, loading, error } = useQuery(GET_GROUPS_QUERY);
+
   return (
     <ul>
       <li className={"border-b border-gray-600"}>
