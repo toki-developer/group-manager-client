@@ -8,15 +8,33 @@ import { Icon } from "src/components/shared/Icon";
 export const GroupList = () => {
   const [showForm, setShowForm] = useState(false);
   const { data, loading, error } = useGroupsByUserQuery();
-  const addGroup = () => {
+  const handleAddGroup = () => {
     setShowForm(true);
+  };
+  const handleClose = () => {
+    setShowForm(false);
   };
   return (
     <div>
-      {showForm ? <GroupForm /> : null}
+      {showForm ? (
+        <>
+          <GroupForm />
+          <div
+            className="opacity-20 top-0 left-0 fixed w-full h-full  bg-white z-0"
+            onClick={handleClose}
+            onKeyDown={handleClose}
+            role="presentation"
+          />
+        </>
+      ) : null}
       <ul>
-        <li className={"border-b border-gray-600"} onClick={addGroup}>
-          <div className={"flex items-center justify-between"}>
+        <li className={"border-b border-gray-600"}>
+          <div
+            className={"flex items-center justify-between"}
+            onClick={handleAddGroup}
+            onKeyDown={handleAddGroup}
+            role="presentation"
+          >
             <div className={"flex items-center"}>
               <Icon iconUrl={"/group.png"} />
               <div className={"ml-2"}>グループを追加</div>
