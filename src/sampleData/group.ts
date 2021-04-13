@@ -7,5 +7,5 @@ export type Group = {
 export const EXAMPLE_GROUP_1: Group = {
   id: "1",
   name: "ハンドボール部",
-  iconUrl: "/sampleModels/avatar_group.jpg",
+  iconUrl: "/sampleData/avatar_group.jpg",
 };

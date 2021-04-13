@@ -1,5 +1,5 @@
 import { Icon } from "src/components/shared/Icon";
-import { EXAMPLE_GROUP_1 } from "src/sampleModels/group";
+import { EXAMPLE_GROUP_1 } from "src/sampleData/group";
 
 const group = EXAMPLE_GROUP_1;
 
