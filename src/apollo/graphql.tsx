@@ -109,7 +109,7 @@ export type GroupsByUserQuery = (
   { __typename?: 'Query' }
   & { groupsByUser?: Maybe<Array<(
     { __typename?: 'GroupModel' }
-    & Pick<GroupModel, 'id' | 'name' | 'iconUrl' | 'updatedAt'>
+    & Pick<GroupModel, 'id' | 'name' | 'iconUrl' | 'createdAt' | 'updatedAt'>
   )>> }
 );
 
@@ -120,6 +120,7 @@ export const GroupsByUserDocument = gql`
     id
     name
     iconUrl
+    createdAt
     updatedAt
   }
 }

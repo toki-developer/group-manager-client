@@ -1,19 +1,25 @@
+import { useContext } from "react";
+import type { GroupModel } from "src/apollo/graphql";
 import { Icon } from "src/components/shared/Icon";
+import { GroupContext } from "src/contexts/GroupContext";
 
-type Props = {
-  item: {
-    id: string;
-    name: string;
-    iconUrl: string;
-  };
-};
+type Props = GroupModel;
 
 export const GroupItem = (props: Props) => {
+  const { setGroup } = useContext(GroupContext);
+  const handleGroup = () => {
+    setGroup(props);
+  };
   return (
-    <div className={"flex items-center justify-between"}>
+    <div
+      className={"flex items-center justify-between"}
+      onClick={handleGroup}
+      onKeyDown={handleGroup}
+      role="presentation"
+    >
       <div className={"flex items-center"}>
-        <Icon iconUrl={props.item.iconUrl} />
-        <div className={"ml-2"}>{props.item.name}</div>
+        <Icon iconUrl={props.iconUrl} />
+        <div className={"ml-2"}>{props.name}</div>
       </div>
       <div>
         <svg

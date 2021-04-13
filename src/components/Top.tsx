@@ -1,13 +1,13 @@
+import { useContext } from "react";
 import { Icon } from "src/components/shared/Icon";
-import { EXAMPLE_GROUP_1 } from "src/sampleData/group";
-
-const group = EXAMPLE_GROUP_1;
+import { GroupContext } from "src/contexts/GroupContext";
 
 type Props = {
   title: string;
 };
 
 export const Top = (props: Props) => {
+  const group = useContext(GroupContext);
   return (
     <div
       className={
@@ -15,7 +15,7 @@ export const Top = (props: Props) => {
       }
     >
       <div className={"flex items-center"}>
-        <Icon iconUrl={group.iconUrl} />
+        <Icon iconUrl={group.group?.iconUrl} />
         <div
           className={
             "inline-block align-middle ml-3 text-2xl font-font-bold text-gray-300"

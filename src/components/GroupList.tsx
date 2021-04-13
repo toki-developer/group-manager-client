@@ -1,9 +1,12 @@
-import { gql, setLogVerbosity } from "@apollo/client";
+import { gql } from "@apollo/client";
 import { useState } from "react";
+import type { GroupModel } from "src/apollo/graphql";
 import { useGroupsByUserQuery } from "src/apollo/graphql";
 import { GroupForm } from "src/components/GroupForm";
 import { GroupItem } from "src/components/GroupItem";
 import { Icon } from "src/components/shared/Icon";
+
+type groupsByUser = GroupModel;
 
 export const GroupList = () => {
   const [showForm, setShowForm] = useState(false);
@@ -28,7 +31,7 @@ export const GroupList = () => {
         </>
       ) : null}
       <ul>
-        <li className={"border-b border-gray-600"}>
+        <li className={"border-b border-gray-900 hover:bg-gray-900"}>
           <div
             className={"flex items-center justify-between"}
             onClick={handleAddGroup}
@@ -41,10 +44,13 @@ export const GroupList = () => {
             </div>
           </div>
         </li>
-        {data?.groupsByUser?.map((item: any) => {
+        {data?.groupsByUser?.map((value: groupsByUser) => {
           return (
-            <li key={item.id} className={"border-b border-gray-600"}>
-              <GroupItem item={item} />
+            <li
+              key={value?.id}
+              className={"border-b border-gray-900 hover:bg-gray-900"}
+            >
+              <GroupItem {...value} />
             </li>
           );
         })}
@@ -59,6 +65,7 @@ gql`
       id
       name
       iconUrl
+      createdAt
       updatedAt
     }
   }
