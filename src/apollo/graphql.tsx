@@ -69,22 +69,22 @@ export type Query = {
 
 
 export type QueryUserArgs = {
-  id: Scalars['ID'];
+  id: Scalars['Int'];
 };
 
 
 export type QueryGroupsByUserArgs = {
-  id: Scalars['ID'];
+  id: Scalars['Int'];
 };
 
 
 export type QueryUsersByGroupArgs = {
-  id: Scalars['ID'];
+  id: Scalars['Int'];
 };
 
 
 export type QueryGroupArgs = {
-  id: Scalars['ID'];
+  id: Scalars['Int'];
 };
 
 export type UserModel = {
@@ -102,24 +102,27 @@ export type AddGroupByUserDto = {
   groupId: Scalars['Float'];
 };
 
-export type GroupsByUserQueryVariables = Exact<{ [key: string]: never; }>;
+export type GroupsByUserQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
 
 
 export type GroupsByUserQuery = (
   { __typename?: 'Query' }
   & { groupsByUser?: Maybe<Array<(
     { __typename?: 'GroupModel' }
-    & Pick<GroupModel, 'id' | 'name' | 'iconUrl' | 'updatedAt'>
+    & Pick<GroupModel, 'id' | 'name' | 'iconUrl' | 'createdAt' | 'updatedAt'>
   )>> }
 );
 
 
 export const GroupsByUserDocument = gql`
-    query groupsByUser {
-  groupsByUser(id: 2) {
+    query groupsByUser($id: Int!) {
+  groupsByUser(id: $id) {
     id
     name
     iconUrl
+    createdAt
     updatedAt
   }
 }
@@ -137,10 +140,11 @@ export const GroupsByUserDocument = gql`
  * @example
  * const { data, loading, error } = useGroupsByUserQuery({
  *   variables: {
+ *      id: // value for 'id'
  *   },
  * });
  */
-export function useGroupsByUserQuery(baseOptions?: Apollo.QueryHookOptions<GroupsByUserQuery, GroupsByUserQueryVariables>) {
+export function useGroupsByUserQuery(baseOptions: Apollo.QueryHookOptions<GroupsByUserQuery, GroupsByUserQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GroupsByUserQuery, GroupsByUserQueryVariables>(GroupsByUserDocument, options);
       }

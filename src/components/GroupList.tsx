@@ -1,14 +1,25 @@
-import { gql, setLogVerbosity } from "@apollo/client";
-import { useState } from "react";
+import { gql } from "@apollo/client";
+import { useContext, useState } from "react";
+import type { GroupModel } from "src/apollo/graphql";
 import { useGroupsByUserQuery } from "src/apollo/graphql";
 import { GroupForm } from "src/components/GroupForm";
 import { GroupItem } from "src/components/GroupItem";
 import { Icon } from "src/components/shared/Icon";
+import { UserContext } from "src/contexts/UserContext";
 
 export const GroupList = () => {
   const [showForm, setShowForm] = useState(false);
-  const { data, loading, error } = useGroupsByUserQuery();
+  const [groupItem, setGroupItem] = useState<GroupModel | null>(null);
+  const { user } = useContext(UserContext);
+  const { data, loading, error } = useGroupsByUserQuery({
+    variables: { id: 2 },
+  });
   const handleAddGroup = () => {
+    setGroupItem(null);
+    setShowForm(true);
+  };
+  const handleEditGroup = (groupItem: GroupModel) => {
+    setGroupItem(groupItem);
     setShowForm(true);
   };
   const handleClose = () => {
@@ -18,7 +29,7 @@ export const GroupList = () => {
     <div>
       {showForm ? (
         <>
-          <GroupForm />
+          <GroupForm groupItem={groupItem} />
           <div
             className="opacity-20 top-0 left-0 fixed w-full h-full  bg-white z-0"
             onClick={handleClose}
@@ -28,12 +39,12 @@ export const GroupList = () => {
         </>
       ) : null}
       <ul>
-        <li className={"border-b border-gray-600"}>
+        <li className={"border-b border-gray-900 hover:bg-gray-900"}>
           <div
             className={"flex items-center justify-between"}
             onClick={handleAddGroup}
-            onKeyDown={handleAddGroup}
-            role="presentation"
+            // onKeyDown={handleAddGroup}
+            // role="presentation"
           >
             <div className={"flex items-center"}>
               <Icon iconUrl={"/group.png"} />
@@ -41,10 +52,13 @@ export const GroupList = () => {
             </div>
           </div>
         </li>
-        {data?.groupsByUser?.map((item: any) => {
+        {data?.groupsByUser?.map((value: GroupModel) => {
           return (
-            <li key={item.id} className={"border-b border-gray-600"}>
-              <GroupItem item={item} />
+            <li
+              key={value?.id}
+              className={"border-b border-gray-900 hover:bg-gray-900"}
+            >
+              <GroupItem group={value} onClick={handleEditGroup} />
             </li>
           );
         })}
@@ -54,11 +68,12 @@ export const GroupList = () => {
 };
 
 gql`
-  query groupsByUser {
-    groupsByUser(id: 2) {
+  query groupsByUser($id: Int!) {
+    groupsByUser(id: $id) {
       id
       name
       iconUrl
+      createdAt
       updatedAt
     }
   }
