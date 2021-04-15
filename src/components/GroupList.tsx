@@ -1,16 +1,20 @@
 import { gql } from "@apollo/client";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import type { GroupModel } from "src/apollo/graphql";
 import { useGroupsByUserQuery } from "src/apollo/graphql";
 import { GroupForm } from "src/components/GroupForm";
 import { GroupItem } from "src/components/GroupItem";
 import { Icon } from "src/components/shared/Icon";
+import { UserContext } from "src/contexts/UserContext";
 
 type groupsByUser = GroupModel;
 
 export const GroupList = () => {
   const [showForm, setShowForm] = useState(false);
-  const { data, loading, error } = useGroupsByUserQuery();
+  const { user } = useContext(UserContext);
+  const { data, loading, error } = useGroupsByUserQuery({
+    variables: { id: 2 },
+  });
   const handleAddGroup = () => {
     setShowForm(true);
   };
@@ -60,8 +64,8 @@ export const GroupList = () => {
 };
 
 gql`
-  query groupsByUser {
-    groupsByUser(id: 2) {
+  query groupsByUser($id: Int!) {
+    groupsByUser(id: $id) {
       id
       name
       iconUrl

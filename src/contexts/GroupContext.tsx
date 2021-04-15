@@ -9,8 +9,8 @@ type Context = {
 
 export const GroupContext = createContext<Context>({
   group: {
-    id: 1,
-    name: "ハンドボール部",
+    id: 0,
+    name: "",
     iconUrl: "/none_icon.png",
     createdAt: "",
     updatedAt: "",
@@ -24,8 +24,8 @@ export const GroupContextProvider: VFC<{ children: ReactNode }> = (props) => {
   const [group, setGroup] = useState<GroupModel | null>(null);
   useEffect(() => {
     setGroup({
-      id: 1,
-      name: "ハンドボール部",
+      id: 0,
+      name: "",
       iconUrl: "/none_icon.png",
       createdAt: "",
       updatedAt: "",
