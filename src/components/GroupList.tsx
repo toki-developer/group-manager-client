@@ -7,15 +7,19 @@ import { GroupItem } from "src/components/GroupItem";
 import { Icon } from "src/components/shared/Icon";
 import { UserContext } from "src/contexts/UserContext";
 
-type groupsByUser = GroupModel;
-
 export const GroupList = () => {
   const [showForm, setShowForm] = useState(false);
+  const [groupItem, setGroupItem] = useState<GroupModel | null>(null);
   const { user } = useContext(UserContext);
   const { data, loading, error } = useGroupsByUserQuery({
     variables: { id: 2 },
   });
   const handleAddGroup = () => {
+    setGroupItem(null);
+    setShowForm(true);
+  };
+  const handleEditGroup = (groupItem: GroupModel) => {
+    setGroupItem(groupItem);
     setShowForm(true);
   };
   const handleClose = () => {
@@ -25,7 +29,7 @@ export const GroupList = () => {
     <div>
       {showForm ? (
         <>
-          <GroupForm />
+          <GroupForm groupItem={groupItem} />
           <div
             className="opacity-20 top-0 left-0 fixed w-full h-full  bg-white z-0"
             onClick={handleClose}
@@ -39,8 +43,8 @@ export const GroupList = () => {
           <div
             className={"flex items-center justify-between"}
             onClick={handleAddGroup}
-            onKeyDown={handleAddGroup}
-            role="presentation"
+            // onKeyDown={handleAddGroup}
+            // role="presentation"
           >
             <div className={"flex items-center"}>
               <Icon iconUrl={"/group.png"} />
@@ -48,13 +52,13 @@ export const GroupList = () => {
             </div>
           </div>
         </li>
-        {data?.groupsByUser?.map((value: groupsByUser) => {
+        {data?.groupsByUser?.map((value: GroupModel) => {
           return (
             <li
               key={value?.id}
               className={"border-b border-gray-900 hover:bg-gray-900"}
             >
-              <GroupItem {...value} />
+              <GroupItem group={value} onClick={handleEditGroup} />
             </li>
           );
         })}

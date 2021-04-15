@@ -3,25 +3,24 @@ import type { GroupModel } from "src/apollo/graphql";
 import { Icon } from "src/components/shared/Icon";
 import { GroupContext } from "src/contexts/GroupContext";
 
-type Props = GroupModel;
+type Props = {
+  group: GroupModel;
+  onClick: (groupItem: GroupModel) => void;
+};
 
-export const GroupItem = (props: Props) => {
+export const GroupItem = ({ group, onClick }: Props) => {
   const { setGroup } = useContext(GroupContext);
   const handleGroup = () => {
-    setGroup(props);
+    setGroup(group);
   };
+
   return (
-    <div
-      className={"flex items-center justify-between"}
-      onClick={handleGroup}
-      onKeyDown={handleGroup}
-      role="presentation"
-    >
+    <div className={"flex items-center justify-between"} onClick={handleGroup}>
       <div className={"flex items-center"}>
-        <Icon iconUrl={props.iconUrl} />
-        <div className={"ml-2"}>{props.name}</div>
+        <Icon iconUrl={group.iconUrl} />
+        <div className={"ml-2"}>{group.name}</div>
       </div>
-      <div>
+      <div onClick={() => onClick(group)}>
         <svg
           className="text-gray-300 flex-shrink-0 ml-7 mr-4 h-7 w-7"
           xmlns="http://www.w3.org/2000/svg"

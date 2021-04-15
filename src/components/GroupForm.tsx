@@ -1,8 +1,13 @@
 // import { useCallback, useState } from "react";
 // import { useForm } from "react-hook-form";
 
+import { GroupModel } from "src/apollo/graphql";
+
 // type Form = { name: string };
-export const GroupForm = () => {
+type Props = {
+  groupItem: GroupModel | null;
+};
+export const GroupForm = ({ groupItem }: Props) => {
   // const { register, handleSubmit } = useForm<Form>();
 
   // const [loading, setLoading] = useState(false);
@@ -12,7 +17,11 @@ export const GroupForm = () => {
       <div
         className="fixed top-12  bg-black border border-gray-600 h-96 rounded-xl z-10"
         style={{ width: "500px" }}
-      ></div>
+      >
+        id:{groupItem?.id}
+        <br />
+        name:{groupItem?.name}
+      </div>
     </div>
   );
 };
