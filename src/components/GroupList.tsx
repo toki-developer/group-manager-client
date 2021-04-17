@@ -31,7 +31,7 @@ export const GroupList = () => {
         <>
           <GroupForm groupItem={groupItem} />
           <div
-            className="opacity-20 top-0 left-0 fixed w-full h-full  bg-white z-0"
+            className="opacity-20 top-0 left-0 fixed w-full h-full  bg-white z-10"
             onClick={handleClose}
             onKeyDown={handleClose}
             role="presentation"
@@ -43,8 +43,8 @@ export const GroupList = () => {
           <div
             className={"flex items-center justify-between"}
             onClick={handleAddGroup}
-            // onKeyDown={handleAddGroup}
-            // role="presentation"
+            onKeyDown={handleAddGroup}
+            role="presentation"
           >
             <div className={"flex items-center"}>
               <Icon iconUrl={"/group.png"} />

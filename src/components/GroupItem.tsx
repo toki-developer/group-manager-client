@@ -15,12 +15,25 @@ export const GroupItem = ({ group, onClick }: Props) => {
   };
 
   return (
-    <div className={"flex items-center justify-between"} onClick={handleGroup}>
+    <div
+      className={"flex items-center justify-between"}
+      onClick={handleGroup}
+      onKeyDown={handleGroup}
+      role="presentation"
+    >
       <div className={"flex items-center"}>
         <Icon iconUrl={group.iconUrl} />
         <div className={"ml-2"}>{group.name}</div>
       </div>
-      <div onClick={() => onClick(group)}>
+      <div
+        onClick={() => {
+          return onClick(group);
+        }}
+        onKeyDown={() => {
+          return onClick(group);
+        }}
+        role="presentation"
+      >
         <svg
           className="text-gray-300 flex-shrink-0 ml-7 mr-4 h-7 w-7"
           xmlns="http://www.w3.org/2000/svg"
