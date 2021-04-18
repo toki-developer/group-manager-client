@@ -5,8 +5,16 @@ import { Icon } from "src/components/shared/Icon";
 
 type Form = { name: string };
 
-export const GroupAddForm = () => {
-  const { register, handleSubmit } = useForm<Form>({
+type Props = {
+  onHandleClose: () => void;
+};
+
+export const GroupAddForm = (props: Props) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Form>({
     defaultValues: {
       name: "",
     },
@@ -18,6 +26,7 @@ export const GroupAddForm = () => {
     setLoading(true);
     console.log(data);
     console.log(file);
+    props.onHandleClose();
     setLoading(false);
   });
   const handleChangeFile = (e: any) => {
@@ -51,8 +60,11 @@ export const GroupAddForm = () => {
             className="bg-black outline-none border-b border-gray-500 p-2"
             placeholder="グループ名を入力"
           />
+          {errors.name && (
+            <p className="text-red-500 text-xs mt-2">※入力必須です</p>
+          )}
         </label>
-        <button className="text-white-500 font-semibold mx-auto md:mx-0 mt-10 md:mt-0 py-2 px-14 border border-none bg-green-500 rounded-full max-w-sm">
+        <button className="text-white-500 font-semibold h-10 mx-auto md:mx-0 mt-10 md:mt-0 py-2 px-14 border border-none bg-green-500 rounded-full max-w-sm">
           <input
             type="submit"
             className="bg-transparent outline-none "
