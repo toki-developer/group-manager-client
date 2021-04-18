@@ -2,24 +2,18 @@ import { gql } from "@apollo/client";
 import { useContext, useState } from "react";
 import type { GroupModel } from "src/apollo/graphql";
 import { useGroupsByUserQuery } from "src/apollo/graphql";
-import { GroupForm } from "src/components/GroupForm";
+import { GroupAddForm } from "src/components/GroupAddForm";
 import { GroupItem } from "src/components/GroupItem";
 import { Icon } from "src/components/shared/Icon";
 import { UserContext } from "src/contexts/UserContext";
 
 export const GroupList = () => {
   const [showForm, setShowForm] = useState(false);
-  const [groupItem, setGroupItem] = useState<GroupModel | null>(null);
   const { user } = useContext(UserContext);
   const { data, loading, error } = useGroupsByUserQuery({
     variables: { id: 2 },
   });
   const handleAddGroup = () => {
-    setGroupItem(null);
-    setShowForm(true);
-  };
-  const handleEditGroup = (groupItem: GroupModel) => {
-    setGroupItem(groupItem);
     setShowForm(true);
   };
   const handleClose = () => {
@@ -29,7 +23,7 @@ export const GroupList = () => {
     <div>
       {showForm ? (
         <>
-          <GroupForm groupItem={groupItem} />
+          <GroupAddForm />
           <div
             className="opacity-20 top-0 left-0 fixed w-full h-full  bg-white z-10"
             onClick={handleClose}
@@ -58,7 +52,7 @@ export const GroupList = () => {
               key={value?.id}
               className={"border-b border-gray-900 hover:bg-gray-900"}
             >
-              <GroupItem group={value} onClick={handleEditGroup} />
+              <GroupItem group={value} />
             </li>
           );
         })}

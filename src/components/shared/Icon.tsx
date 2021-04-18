@@ -1,7 +1,9 @@
+import cc from "classcat";
 // import Image from "next/image";
 
 type Props = {
   iconUrl: string | undefined;
+  size?: "large";
 };
 
 export const Icon = (props: Props) => {
@@ -10,7 +12,10 @@ export const Icon = (props: Props) => {
       <img
         src={props.iconUrl}
         alt="icon"
-        className="rounded-full w-12 h-12 object-cover"
+        className={cc([
+          "rounded-full object-cover w-12 h-12",
+          { ["w-28 h-28"]: props.size === "large" },
+        ])}
       />
     </div>
   );
