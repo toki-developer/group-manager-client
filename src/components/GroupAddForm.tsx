@@ -22,10 +22,24 @@ export const GroupAddForm = (props: Props) => {
   const [file, setFile] = useState<File>();
   // const [updateGroup] = useまるまるMutation();
   const [loading, setLoading] = useState(false);
+  const uploadImg = useCallback(async (file: File) => {
+    const fileName = "imgfile2";
+    const res = await fetch(`/api/upload?file=${fileName}`);
+    const { url, fields } = await res.json();
+    const body = new FormData();
+    Object.entries({ ...fields, file }).forEach(([key, value]) => {
+      body.append(key, value as string | Blob);
+    });
+    const upload = await fetch(url, { method: "POST", body });
+    if (upload.ok) {
+      return { error: false, iconUrl: fileName };
+    } else {
+      return { error: true, iconUrl: "" };
+    }
+  }, []);
   const handleClick = handleSubmit((data) => {
     setLoading(true);
-    console.log(data);
-    console.log(file);
+    if (file) uploadImg(file);
     props.onHandleClose();
     setLoading(false);
   });
