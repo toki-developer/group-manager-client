@@ -102,6 +102,19 @@ export type AddGroupByUserDto = {
   groupId: Scalars['Float'];
 };
 
+export type SaveGroupMutationVariables = Exact<{
+  group: AddGroupDto;
+}>;
+
+
+export type SaveGroupMutation = (
+  { __typename?: 'Mutation' }
+  & { saveGroup: (
+    { __typename?: 'GroupModel' }
+    & Pick<GroupModel, 'name' | 'iconUrl'>
+  ) }
+);
+
 export type GroupsByUserQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -116,6 +129,40 @@ export type GroupsByUserQuery = (
 );
 
 
+export const SaveGroupDocument = gql`
+    mutation saveGroup($group: AddGroupDto!) {
+  saveGroup(group: $group) {
+    name
+    iconUrl
+  }
+}
+    `;
+export type SaveGroupMutationFn = Apollo.MutationFunction<SaveGroupMutation, SaveGroupMutationVariables>;
+
+/**
+ * __useSaveGroupMutation__
+ *
+ * To run a mutation, you first call `useSaveGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSaveGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [saveGroupMutation, { data, loading, error }] = useSaveGroupMutation({
+ *   variables: {
+ *      group: // value for 'group'
+ *   },
+ * });
+ */
+export function useSaveGroupMutation(baseOptions?: Apollo.MutationHookOptions<SaveGroupMutation, SaveGroupMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SaveGroupMutation, SaveGroupMutationVariables>(SaveGroupDocument, options);
+      }
+export type SaveGroupMutationHookResult = ReturnType<typeof useSaveGroupMutation>;
+export type SaveGroupMutationResult = Apollo.MutationResult<SaveGroupMutation>;
+export type SaveGroupMutationOptions = Apollo.BaseMutationOptions<SaveGroupMutation, SaveGroupMutationVariables>;
 export const GroupsByUserDocument = gql`
     query groupsByUser($id: Int!) {
   groupsByUser(id: $id) {
