@@ -23,7 +23,7 @@ export const GroupAddForm = (props: Props) => {
   const [saveGroup] = useSaveGroupMutation();
   const [loading, setLoading] = useState(false);
   const uploadImg = useCallback(async (file: File) => {
-    const fileName = "imgfile6";
+    const fileName = "imgfile10";
     const res = await fetch(`/api/upload?file=${fileName}`);
     const { url, fields } = await res.json();
     const body = new FormData();
@@ -31,20 +31,15 @@ export const GroupAddForm = (props: Props) => {
       body.append(key, value as string | Blob);
     });
     const upload = await fetch(url, { method: "POST", body });
-    if (upload.ok) {
-      return { error: false, iconUrl: fileName };
-    } else {
-      return { error: true, iconUrl: "" };
+    if (!upload.ok) {
+      alert("エラー");
     }
+    return url + "IconImage/" + fileName;
   }, []);
-  const handleClick = handleSubmit((data) => {
+  const handleClick = handleSubmit(async (data) => {
     setLoading(true);
-    data.iconUrl = "";
-    if (file) {
-      uploadImg(file).then((res) => {
-        data.iconUrl = res.iconUrl;
-      });
-    }
+    const iconUrl = file ? await uploadImg(file) : undefined;
+    data.iconUrl = iconUrl;
     saveGroup({ variables: { group: data } });
     props.onHandleClose();
     setLoading(false);
@@ -84,13 +79,17 @@ export const GroupAddForm = (props: Props) => {
             <p className="text-red-500 text-xs mt-2">※入力必須です</p>
           )}
         </label>
-        <button className="text-white-500 font-semibold h-10 mx-auto md:mx-0 mt-10 md:mt-0 py-2 px-14 border border-none bg-green-500 rounded-full max-w-sm">
-          <input
-            type="submit"
-            className="bg-transparent outline-none "
-            onClick={handleClick}
-            value="新規グループ作成"
-          />
+        <button className="text-white-500 font-semibold h-10 mx-auto md:mx-0 mt-10 md:mt-0 py-2 px-14 border border-none bg-green-500 rounded-full w-64">
+          {loading ? (
+            <span className="text-green-100">グループ作成中..</span>
+          ) : (
+            <input
+              type="submit"
+              className="bg-transparent outline-none "
+              onClick={handleClick}
+              value="新規グループ作成"
+            />
+          )}
         </button>
       </div>
     </div>

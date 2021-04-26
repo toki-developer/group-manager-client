@@ -1,10 +1,15 @@
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
+import { gql } from "@apollo/client";
+import * as Apollo from "@apollo/client";
+
 export type Maybe<T> = T | null;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-const defaultOptions =  {}
+export type Exact<T extends { [key: string]: unknown }> = {
+  [K in keyof T]: T[K];
+};
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> &
+  { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> &
+  { [SubKey in K]: Maybe<T[SubKey]> };
+const defaultOptions = {};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -17,127 +22,121 @@ export type Scalars = {
 };
 
 export type AddGroupDto = {
-  name: Scalars['String'];
-  iconUrl: Scalars['String'];
+  name: Scalars["String"];
+  iconUrl?: Scalars["String"];
 };
 
 export type AddUserDto = {
-  name: Scalars['String'];
-  email: Scalars['String'];
-  iconUrl: Scalars['String'];
+  name: Scalars["String"];
+  email: Scalars["String"];
+  iconUrl: Scalars["String"];
 };
 
-
 export type GroupModel = {
-  __typename?: 'GroupModel';
-  id: Scalars['Int'];
-  name: Scalars['String'];
-  iconUrl: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
+  __typename?: "GroupModel";
+  id: Scalars["Int"];
+  name: Scalars["String"];
+  iconUrl: Scalars["String"];
+  createdAt: Scalars["DateTime"];
+  updatedAt: Scalars["DateTime"];
 };
 
 export type Mutation = {
-  __typename?: 'Mutation';
+  __typename?: "Mutation";
   saveUser: UserModel;
   addGroupByUser: UserModel;
   saveGroup: GroupModel;
 };
 
-
 export type MutationSaveUserArgs = {
   user: AddUserDto;
 };
 
-
 export type MutationAddGroupByUserArgs = {
   affiliation: AddGroupByUserDto;
 };
-
 
 export type MutationSaveGroupArgs = {
   group: AddGroupDto;
 };
 
 export type Query = {
-  __typename?: 'Query';
+  __typename?: "Query";
   user?: Maybe<UserModel>;
   groupsByUser?: Maybe<Array<GroupModel>>;
   usersByGroup?: Maybe<Array<UserModel>>;
   group?: Maybe<GroupModel>;
 };
 
-
 export type QueryUserArgs = {
-  id: Scalars['Int'];
+  id: Scalars["Int"];
 };
-
 
 export type QueryGroupsByUserArgs = {
-  id: Scalars['Int'];
+  id: Scalars["Int"];
 };
-
 
 export type QueryUsersByGroupArgs = {
-  id: Scalars['Int'];
+  id: Scalars["Int"];
 };
 
-
 export type QueryGroupArgs = {
-  id: Scalars['Int'];
+  id: Scalars["Int"];
 };
 
 export type UserModel = {
-  __typename?: 'UserModel';
-  id: Scalars['Int'];
-  name: Scalars['String'];
-  email: Scalars['String'];
-  iconUrl: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
+  __typename?: "UserModel";
+  id: Scalars["Int"];
+  name: Scalars["String"];
+  email: Scalars["String"];
+  iconUrl: Scalars["String"];
+  createdAt: Scalars["DateTime"];
+  updatedAt: Scalars["DateTime"];
 };
 
 export type AddGroupByUserDto = {
-  userId: Scalars['Float'];
-  groupId: Scalars['Float'];
+  userId: Scalars["Float"];
+  groupId: Scalars["Float"];
 };
 
 export type SaveGroupMutationVariables = Exact<{
   group: AddGroupDto;
 }>;
 
-
-export type SaveGroupMutation = (
-  { __typename?: 'Mutation' }
-  & { saveGroup: (
-    { __typename?: 'GroupModel' }
-    & Pick<GroupModel, 'name' | 'iconUrl'>
-  ) }
-);
+export type SaveGroupMutation = { __typename?: "Mutation" } & {
+  saveGroup: { __typename?: "GroupModel" } & Pick<
+    GroupModel,
+    "name" | "iconUrl"
+  >;
+};
 
 export type GroupsByUserQueryVariables = Exact<{
-  id: Scalars['Int'];
+  id: Scalars["Int"];
 }>;
 
-
-export type GroupsByUserQuery = (
-  { __typename?: 'Query' }
-  & { groupsByUser?: Maybe<Array<(
-    { __typename?: 'GroupModel' }
-    & Pick<GroupModel, 'id' | 'name' | 'iconUrl' | 'createdAt' | 'updatedAt'>
-  )>> }
-);
-
+export type GroupsByUserQuery = { __typename?: "Query" } & {
+  groupsByUser?: Maybe<
+    Array<
+      { __typename?: "GroupModel" } & Pick<
+        GroupModel,
+        "id" | "name" | "iconUrl" | "createdAt" | "updatedAt"
+      >
+    >
+  >;
+};
 
 export const SaveGroupDocument = gql`
-    mutation saveGroup($group: AddGroupDto!) {
-  saveGroup(group: $group) {
-    name
-    iconUrl
+  mutation saveGroup($group: AddGroupDto!) {
+    saveGroup(group: $group) {
+      name
+      iconUrl
+    }
   }
-}
-    `;
-export type SaveGroupMutationFn = Apollo.MutationFunction<SaveGroupMutation, SaveGroupMutationVariables>;
+`;
+export type SaveGroupMutationFn = Apollo.MutationFunction<
+  SaveGroupMutation,
+  SaveGroupMutationVariables
+>;
 
 /**
  * __useSaveGroupMutation__
@@ -156,24 +155,37 @@ export type SaveGroupMutationFn = Apollo.MutationFunction<SaveGroupMutation, Sav
  *   },
  * });
  */
-export function useSaveGroupMutation(baseOptions?: Apollo.MutationHookOptions<SaveGroupMutation, SaveGroupMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<SaveGroupMutation, SaveGroupMutationVariables>(SaveGroupDocument, options);
-      }
-export type SaveGroupMutationHookResult = ReturnType<typeof useSaveGroupMutation>;
-export type SaveGroupMutationResult = Apollo.MutationResult<SaveGroupMutation>;
-export type SaveGroupMutationOptions = Apollo.BaseMutationOptions<SaveGroupMutation, SaveGroupMutationVariables>;
-export const GroupsByUserDocument = gql`
-    query groupsByUser($id: Int!) {
-  groupsByUser(id: $id) {
-    id
-    name
-    iconUrl
-    createdAt
-    updatedAt
-  }
+export function useSaveGroupMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SaveGroupMutation,
+    SaveGroupMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<SaveGroupMutation, SaveGroupMutationVariables>(
+    SaveGroupDocument,
+    options
+  );
 }
-    `;
+export type SaveGroupMutationHookResult = ReturnType<
+  typeof useSaveGroupMutation
+>;
+export type SaveGroupMutationResult = Apollo.MutationResult<SaveGroupMutation>;
+export type SaveGroupMutationOptions = Apollo.BaseMutationOptions<
+  SaveGroupMutation,
+  SaveGroupMutationVariables
+>;
+export const GroupsByUserDocument = gql`
+  query groupsByUser($id: Int!) {
+    groupsByUser(id: $id) {
+      id
+      name
+      iconUrl
+      createdAt
+      updatedAt
+    }
+  }
+`;
 
 /**
  * __useGroupsByUserQuery__
@@ -191,14 +203,37 @@ export const GroupsByUserDocument = gql`
  *   },
  * });
  */
-export function useGroupsByUserQuery(baseOptions: Apollo.QueryHookOptions<GroupsByUserQuery, GroupsByUserQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GroupsByUserQuery, GroupsByUserQueryVariables>(GroupsByUserDocument, options);
-      }
-export function useGroupsByUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GroupsByUserQuery, GroupsByUserQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GroupsByUserQuery, GroupsByUserQueryVariables>(GroupsByUserDocument, options);
-        }
-export type GroupsByUserQueryHookResult = ReturnType<typeof useGroupsByUserQuery>;
-export type GroupsByUserLazyQueryHookResult = ReturnType<typeof useGroupsByUserLazyQuery>;
-export type GroupsByUserQueryResult = Apollo.QueryResult<GroupsByUserQuery, GroupsByUserQueryVariables>;
+export function useGroupsByUserQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GroupsByUserQuery,
+    GroupsByUserQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GroupsByUserQuery, GroupsByUserQueryVariables>(
+    GroupsByUserDocument,
+    options
+  );
+}
+export function useGroupsByUserLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GroupsByUserQuery,
+    GroupsByUserQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GroupsByUserQuery, GroupsByUserQueryVariables>(
+    GroupsByUserDocument,
+    options
+  );
+}
+export type GroupsByUserQueryHookResult = ReturnType<
+  typeof useGroupsByUserQuery
+>;
+export type GroupsByUserLazyQueryHookResult = ReturnType<
+  typeof useGroupsByUserLazyQuery
+>;
+export type GroupsByUserQueryResult = Apollo.QueryResult<
+  GroupsByUserQuery,
+  GroupsByUserQueryVariables
+>;
