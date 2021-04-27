@@ -1,9 +1,10 @@
 import gql from "graphql-tag";
-import { useCallback, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import type { AddGroupDto } from "src/apollo/graphql";
 import { useSaveGroupMutation } from "src/apollo/graphql";
 import { Icon } from "src/components/shared/Icon";
+import { UserContext } from "src/contexts/UserContext";
 
 type Props = {
   onHandleClose: () => void;
@@ -19,11 +20,12 @@ export const GroupAddForm = (props: Props) => {
       name: "",
     },
   });
+  const { user } = useContext(UserContext);
   const [file, setFile] = useState<File>();
   const [saveGroup] = useSaveGroupMutation();
   const [loading, setLoading] = useState(false);
   const uploadImg = useCallback(async (file: File) => {
-    const fileName = "imgfile10";
+    const fileName = "imgfile132";
     const res = await fetch(`/api/upload?file=${fileName}`);
     const { url, fields } = await res.json();
     const body = new FormData();
@@ -39,8 +41,8 @@ export const GroupAddForm = (props: Props) => {
   const handleClick = handleSubmit(async (data) => {
     setLoading(true);
     const iconUrl = file ? await uploadImg(file) : undefined;
-    data.iconUrl = iconUrl;
-    saveGroup({ variables: { group: data } });
+    data.iconUrl = iconUrl ?? "/none_icon.png";
+    saveGroup({ variables: { id: user.id, group: data } });
     props.onHandleClose();
     setLoading(false);
   });
@@ -97,8 +99,8 @@ export const GroupAddForm = (props: Props) => {
 };
 
 gql`
-  mutation saveGroup($group: AddGroupDto!) {
-    saveGroup(group: $group) {
+  mutation saveGroup($id: Int!, $group: AddGroupDto!) {
+    saveGroup(id: $id, group: $group) {
       name
       iconUrl
     }
