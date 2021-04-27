@@ -23,7 +23,7 @@ export const GroupList = () => {
     <div>
       {showForm ? (
         <>
-          <GroupAddForm />
+          <GroupAddForm onHandleClose={handleClose} />
           <div
             className="opacity-20 top-0 left-0 fixed w-full h-full  bg-white z-10"
             onClick={handleClose}

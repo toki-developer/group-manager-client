@@ -32,3 +32,6 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# google-key-jsonfile
+group-manager-310713-d0ca41996194.json

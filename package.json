@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.3.14",
+    "@google-cloud/storage": "^5.8.4",
     "@graphql-codegen/cli": "^1.21.3",
     "@graphql-codegen/introspection": "^1.18.1",
     "@graphql-codegen/typescript": "^1.21.1",

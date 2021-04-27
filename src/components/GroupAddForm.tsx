@@ -1,23 +1,49 @@
-import { useCallback, useState } from "react";
+import gql from "graphql-tag";
+import { useCallback, useContext, useState } from "react";
 import { useForm } from "react-hook-form";
-import type { GroupModel } from "src/apollo/graphql";
+import type { AddGroupDto } from "src/apollo/graphql";
+import { useSaveGroupMutation } from "src/apollo/graphql";
 import { Icon } from "src/components/shared/Icon";
+import { UserContext } from "src/contexts/UserContext";
 
-type Form = { name: string };
+type Props = {
+  onHandleClose: () => void;
+};
 
-export const GroupAddForm = () => {
-  const { register, handleSubmit } = useForm<Form>({
+export const GroupAddForm = (props: Props) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<AddGroupDto>({
     defaultValues: {
       name: "",
     },
   });
+  const { user } = useContext(UserContext);
   const [file, setFile] = useState<File>();
-  // const [updateGroup] = useまるまるMutation();
+  const [saveGroup] = useSaveGroupMutation();
   const [loading, setLoading] = useState(false);
-  const handleClick = handleSubmit((data) => {
+  const uploadImg = useCallback(async (file: File) => {
+    const fileName = "imgfile132";
+    const res = await fetch(`/api/upload?file=${fileName}`);
+    const { url, fields } = await res.json();
+    const body = new FormData();
+    Object.entries({ ...fields, file }).forEach(([key, value]) => {
+      body.append(key, value as string | Blob);
+    });
+    const upload = await fetch(url, { method: "POST", body });
+    if (!upload.ok) {
+      alert("エラー");
+    }
+    return url + "IconImage/" + fileName;
+  }, []);
+  const handleClick = handleSubmit(async (data) => {
     setLoading(true);
-    console.log(data);
-    console.log(file);
+    const iconUrl = file ? await uploadImg(file) : undefined;
+    data.iconUrl = iconUrl ?? "/none_icon.png";
+    saveGroup({ variables: { id: user.id, group: data } });
+    props.onHandleClose();
     setLoading(false);
   });
   const handleChangeFile = (e: any) => {
@@ -51,16 +77,32 @@ export const GroupAddForm = () => {
             className="bg-black outline-none border-b border-gray-500 p-2"
             placeholder="グループ名を入力"
           />
+          {errors.name && (
+            <p className="text-red-500 text-xs mt-2">※入力必須です</p>
+          )}
         </label>
-        <button className="text-white-500 font-semibold mx-auto md:mx-0 mt-10 md:mt-0 py-2 px-14 border border-none bg-green-500 rounded-full max-w-sm">
-          <input
-            type="submit"
-            className="bg-transparent outline-none "
-            onClick={handleClick}
-            value="新規グループ作成"
-          />
+        <button className="text-white-500 font-semibold h-10 mx-auto md:mx-0 mt-10 md:mt-0 py-2 px-14 border border-none bg-green-500 rounded-full w-64">
+          {loading ? (
+            <span className="text-green-100">グループ作成中..</span>
+          ) : (
+            <input
+              type="submit"
+              className="bg-transparent outline-none "
+              onClick={handleClick}
+              value="新規グループ作成"
+            />
+          )}
         </button>
       </div>
     </div>
   );
 };
+
+gql`
+  mutation saveGroup($id: Int!, $group: AddGroupDto!) {
+    saveGroup(id: $id, group: $group) {
+      name
+      iconUrl
+    }
+  }
+`;

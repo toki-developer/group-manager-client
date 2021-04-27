@@ -3,7 +3,7 @@ import { createContext, useEffect, useState } from "react";
 import type { UserModel } from "src/apollo/graphql";
 
 type Context = {
-  user: UserModel | null;
+  user: UserModel;
 };
 export const UserContext = createContext<Context>({
   user: {
@@ -17,12 +17,19 @@ export const UserContext = createContext<Context>({
 });
 
 export const UserContextProvider: VFC<{ children: ReactNode }> = (props) => {
-  const [user, setUser] = useState<UserModel | null>(null);
+  const [user, setUser] = useState<UserModel>({
+    id: 0,
+    name: "",
+    email: "",
+    iconUrl: "/none_icon.png",
+    createdAt: "",
+    updatedAt: "",
+  });
   useEffect(() => {
     setUser({
-      id: 0,
-      name: "",
-      email: "",
+      id: 2,
+      name: "toki",
+      email: "toki@email",
       iconUrl: "/none_icon.png",
       createdAt: "",
       updatedAt: "",
