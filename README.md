@@ -16,6 +16,8 @@
 
 - Prettier
 
+* Google Cloud Storage
+
 # セットアップ
 
 ```
