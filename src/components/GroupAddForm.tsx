@@ -25,7 +25,7 @@ export const GroupAddForm = (props: Props) => {
   const [saveGroup] = useSaveGroupMutation();
   const [loading, setLoading] = useState(false);
   const uploadImg = useCallback(async (file: File) => {
-    const fileName = "imgfile132";
+    const fileName = Math.random().toString(32).substring(2); // Todo:nanoidにする
     const res = await fetch(`/api/upload?file=${fileName}`);
     const { url, fields } = await res.json();
     const body = new FormData();
