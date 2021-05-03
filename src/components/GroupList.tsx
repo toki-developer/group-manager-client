@@ -10,7 +10,7 @@ import { UserContext } from "src/contexts/UserContext";
 export const GroupList = () => {
   const [showForm, setShowForm] = useState(false);
   const { user } = useContext(UserContext);
-  const { data, loading, error } = useGroupsByUserQuery({
+  const { data, loading, error, refetch } = useGroupsByUserQuery({
     variables: { id: user.id },
   });
   const handleAddGroup = () => {
@@ -23,7 +23,7 @@ export const GroupList = () => {
     <div>
       {showForm ? (
         <>
-          <GroupAddForm onHandleClose={handleClose} />
+          <GroupAddForm onHandleClose={handleClose} refetch={refetch} />
           <div
             className="opacity-20 top-0 left-0 fixed w-full h-full  bg-white z-10"
             onClick={handleClose}
@@ -46,16 +46,17 @@ export const GroupList = () => {
             </div>
           </div>
         </li>
-        {data?.groupsByUser?.map((value: GroupModel) => {
-          return (
-            <li
-              key={value?.id}
-              className={"border-b border-gray-900 hover:bg-gray-900"}
-            >
-              <GroupItem group={value} />
-            </li>
-          );
-        })}
+        {!loading &&
+          data?.groupsByUser?.map((value: GroupModel) => {
+            return (
+              <li
+                key={value?.id}
+                className={"border-b border-gray-900 hover:bg-gray-900"}
+              >
+                <GroupItem group={value} />
+              </li>
+            );
+          })}
       </ul>
     </div>
   );
