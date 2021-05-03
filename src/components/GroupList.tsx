@@ -10,12 +10,9 @@ import { UserContext } from "src/contexts/UserContext";
 export const GroupList = () => {
   const [showForm, setShowForm] = useState(false);
   const { user } = useContext(UserContext);
-  const { data, loading, error } = useGroupsByUserQuery({
+  const { data, loading, error, refetch } = useGroupsByUserQuery({
     variables: { id: user.id },
   });
-  console.log(user.id);
-  console.log(data);
-  console.log(loading);
   const handleAddGroup = () => {
     setShowForm(true);
   };
@@ -26,7 +23,7 @@ export const GroupList = () => {
     <div>
       {showForm ? (
         <>
-          <GroupAddForm onHandleClose={handleClose} />
+          <GroupAddForm onHandleClose={handleClose} refetch={refetch} />
           <div
             className="opacity-20 top-0 left-0 fixed w-full h-full  bg-white z-10"
             onClick={handleClose}

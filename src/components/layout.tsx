@@ -18,11 +18,12 @@ export const Layout = (props: { children: ReactNode }) => {
         </div>
         <div
           className={
-            "lg:hidden fixed bottom-0 w-full max-w-3xl bg-black border-l border-r border-t border-gray-600 text-gray-300"
+            "lg:hidden fixed bottom-0 w-full max-w-3xl bg-black border-l border-r border-t border-gray-600 text-gray-300 h-14 md:h-16"
           }
         >
           <FixedMenu />
         </div>
+        <div className="lg:hidden h-14 md:h-16"></div>
       </div>
     </div>
   );

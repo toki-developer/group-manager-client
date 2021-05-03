@@ -8,6 +8,7 @@ import { UserContext } from "src/contexts/UserContext";
 
 type Props = {
   onHandleClose: () => void;
+  refetch: () => void;
 };
 
 export const GroupAddForm = (props: Props) => {
@@ -22,7 +23,11 @@ export const GroupAddForm = (props: Props) => {
   });
   const { user } = useContext(UserContext);
   const [file, setFile] = useState<File>();
-  const [saveGroup] = useSaveGroupMutation();
+  const [saveGroup] = useSaveGroupMutation({
+    onCompleted() {
+      props.refetch();
+    },
+  });
   const [loading, setLoading] = useState(false);
   const uploadImg = useCallback(async (file: File) => {
     const fileName = Math.random().toString(32).substring(2); // Todo:nanoidにする
