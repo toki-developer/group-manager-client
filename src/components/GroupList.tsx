@@ -13,6 +13,9 @@ export const GroupList = () => {
   const { data, loading, error } = useGroupsByUserQuery({
     variables: { id: user.id },
   });
+  console.log(user.id);
+  console.log(data);
+  console.log(loading);
   const handleAddGroup = () => {
     setShowForm(true);
   };
@@ -46,16 +49,17 @@ export const GroupList = () => {
             </div>
           </div>
         </li>
-        {data?.groupsByUser?.map((value: GroupModel) => {
-          return (
-            <li
-              key={value?.id}
-              className={"border-b border-gray-900 hover:bg-gray-900"}
-            >
-              <GroupItem group={value} />
-            </li>
-          );
-        })}
+        {!loading &&
+          data?.groupsByUser?.map((value: GroupModel) => {
+            return (
+              <li
+                key={value?.id}
+                className={"border-b border-gray-900 hover:bg-gray-900"}
+              >
+                <GroupItem group={value} />
+              </li>
+            );
+          })}
       </ul>
     </div>
   );

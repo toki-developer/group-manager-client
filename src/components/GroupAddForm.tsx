@@ -51,6 +51,27 @@ export const GroupAddForm = (props: Props) => {
   };
   return (
     <div className="fixed top-0 md:top-28 p-6 bg-black border border-gray-600 h-full md:h-96 md:rounded-xl z-20 w-full md:max-w-3xl lg:max-w-screen-sm">
+      <div
+        className="text-green-500"
+        onClick={props.onHandleClose}
+        onKeyDown={props.onHandleClose}
+        role="presentation"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M10 19l-7-7m0 0l7-7m-7 7h18"
+          />
+        </svg>
+      </div>
       <div className="flex items-center mb-4">
         {file ? (
           <Icon iconUrl={window.URL.createObjectURL(file)} size="large" />
