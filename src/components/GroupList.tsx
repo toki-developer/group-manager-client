@@ -10,7 +10,7 @@ import { UserContext } from "src/contexts/UserContext";
 export const GroupList = () => {
   const [showForm, setShowForm] = useState(false);
   const { user } = useContext(UserContext);
-  const { data, loading, error, refetch } = useGroupsByUserQuery({
+  const { data, loading, refetch } = useGroupsByUserQuery({
     variables: { id: user.id },
   });
   const handleAddGroup = () => {
