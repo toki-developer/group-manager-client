@@ -1,6 +1,6 @@
 import { Storage } from "@google-cloud/storage";
 
-export const handler = async (req: any, res: any) => {
+export default async function handler(req: any, res: any) {
   const storage = new Storage({
     projectId: process.env.PROJECT_ID,
     keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
@@ -15,4 +15,4 @@ export const handler = async (req: any, res: any) => {
   };
   const [response] = await file.generateSignedPostPolicyV4(options);
   res.status(200).json(response);
-};
+}
