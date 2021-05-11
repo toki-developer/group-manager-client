@@ -125,7 +125,7 @@ export const GroupAddForm = (props: Props) => {
 };
 
 gql`
-  mutation saveGroup($id: Int!, $group: AddGroupDto!) {
+  mutation saveGroup($id: String!, $group: AddGroupDto!) {
     saveGroup(id: $id, group: $group) {
       name
       iconUrl

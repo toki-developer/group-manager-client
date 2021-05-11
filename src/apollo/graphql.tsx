@@ -22,6 +22,7 @@ export type AddGroupDto = {
 };
 
 export type AddUserDto = {
+  id: Scalars['String'];
   name: Scalars['String'];
   email: Scalars['String'];
   iconUrl: Scalars['String'];
@@ -57,7 +58,7 @@ export type MutationAddGroupByUserArgs = {
 
 export type MutationSaveGroupArgs = {
   group: AddGroupDto;
-  id: Scalars['Int'];
+  id: Scalars['String'];
 };
 
 export type Query = {
@@ -70,12 +71,12 @@ export type Query = {
 
 
 export type QueryUserArgs = {
-  id: Scalars['Int'];
+  id: Scalars['String'];
 };
 
 
 export type QueryGroupsByUserArgs = {
-  id: Scalars['Int'];
+  id: Scalars['String'];
 };
 
 
@@ -90,7 +91,7 @@ export type QueryGroupArgs = {
 
 export type UserModel = {
   __typename?: 'UserModel';
-  id: Scalars['Int'];
+  id: Scalars['String'];
   name: Scalars['String'];
   email: Scalars['String'];
   iconUrl: Scalars['String'];
@@ -99,12 +100,12 @@ export type UserModel = {
 };
 
 export type AddGroupByUserDto = {
-  userId: Scalars['Float'];
+  userId: Scalars['String'];
   groupId: Scalars['Float'];
 };
 
 export type SaveGroupMutationVariables = Exact<{
-  id: Scalars['Int'];
+  id: Scalars['String'];
   group: AddGroupDto;
 }>;
 
@@ -118,7 +119,7 @@ export type SaveGroupMutation = (
 );
 
 export type GroupsByUserQueryVariables = Exact<{
-  id: Scalars['Int'];
+  id: Scalars['String'];
 }>;
 
 
@@ -132,7 +133,7 @@ export type GroupsByUserQuery = (
 
 
 export const SaveGroupDocument = gql`
-    mutation saveGroup($id: Int!, $group: AddGroupDto!) {
+    mutation saveGroup($id: String!, $group: AddGroupDto!) {
   saveGroup(id: $id, group: $group) {
     name
     iconUrl
@@ -167,7 +168,7 @@ export type SaveGroupMutationHookResult = ReturnType<typeof useSaveGroupMutation
 export type SaveGroupMutationResult = Apollo.MutationResult<SaveGroupMutation>;
 export type SaveGroupMutationOptions = Apollo.BaseMutationOptions<SaveGroupMutation, SaveGroupMutationVariables>;
 export const GroupsByUserDocument = gql`
-    query groupsByUser($id: Int!) {
+    query groupsByUser($id: String!) {
   groupsByUser(id: $id) {
     id
     name

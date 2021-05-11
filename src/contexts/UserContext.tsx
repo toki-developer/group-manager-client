@@ -7,7 +7,7 @@ type Context = {
 };
 export const UserContext = createContext<Context>({
   user: {
-    id: 0,
+    id: "",
     name: "",
     email: "",
     iconUrl: "/none_icon.png",
@@ -18,7 +18,7 @@ export const UserContext = createContext<Context>({
 
 export const UserContextProvider: VFC<{ children: ReactNode }> = (props) => {
   const [user, setUser] = useState<UserModel>({
-    id: 0,
+    id: "",
     name: "",
     email: "",
     iconUrl: "/none_icon.png",
@@ -27,7 +27,7 @@ export const UserContextProvider: VFC<{ children: ReactNode }> = (props) => {
   });
   useEffect(() => {
     setUser({
-      id: 2,
+      id: "tokitoki",
       name: "toki",
       email: "toki@email",
       iconUrl: "/none_icon.png",

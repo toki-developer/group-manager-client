@@ -63,7 +63,7 @@ export const GroupList = () => {
 };
 
 gql`
-  query groupsByUser($id: Int!) {
+  query groupsByUser($id: String!) {
     groupsByUser(id: $id) {
       id
       name
