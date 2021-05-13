@@ -14,8 +14,10 @@ export const Top = (props: Props) => {
         " sticky top-0 bg-black border-gray-600 border-b border-l border-r"
       }
     >
-      <div className={"flex items-center"}>
-        <Icon iconUrl={group.group?.iconUrl} />
+      <div className={"flex items-center h-16"}>
+        {props.title !== "マイページ" && (
+          <Icon iconUrl={group.group?.iconUrl} />
+        )}
         <div
           className={
             "inline-block align-middle ml-3 text-2xl font-font-bold text-gray-300"

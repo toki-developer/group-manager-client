@@ -24,7 +24,6 @@ export type AddGroupDto = {
 export type AddUserDto = {
   id: Scalars['String'];
   name: Scalars['String'];
-  email: Scalars['String'];
   iconUrl: Scalars['String'];
 };
 
@@ -93,7 +92,6 @@ export type UserModel = {
   __typename?: 'UserModel';
   id: Scalars['String'];
   name: Scalars['String'];
-  email: Scalars['String'];
   iconUrl: Scalars['String'];
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
@@ -103,6 +101,19 @@ export type AddGroupByUserDto = {
   userId: Scalars['String'];
   groupId: Scalars['Float'];
 };
+
+export type SaveUserMutationVariables = Exact<{
+  user: AddUserDto;
+}>;
+
+
+export type SaveUserMutation = (
+  { __typename?: 'Mutation' }
+  & { saveUser: (
+    { __typename?: 'UserModel' }
+    & Pick<UserModel, 'id' | 'name' | 'iconUrl'>
+  ) }
+);
 
 export type SaveGroupMutationVariables = Exact<{
   id: Scalars['String'];
@@ -132,6 +143,41 @@ export type GroupsByUserQuery = (
 );
 
 
+export const SaveUserDocument = gql`
+    mutation saveUser($user: AddUserDto!) {
+  saveUser(user: $user) {
+    id
+    name
+    iconUrl
+  }
+}
+    `;
+export type SaveUserMutationFn = Apollo.MutationFunction<SaveUserMutation, SaveUserMutationVariables>;
+
+/**
+ * __useSaveUserMutation__
+ *
+ * To run a mutation, you first call `useSaveUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSaveUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [saveUserMutation, { data, loading, error }] = useSaveUserMutation({
+ *   variables: {
+ *      user: // value for 'user'
+ *   },
+ * });
+ */
+export function useSaveUserMutation(baseOptions?: Apollo.MutationHookOptions<SaveUserMutation, SaveUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SaveUserMutation, SaveUserMutationVariables>(SaveUserDocument, options);
+      }
+export type SaveUserMutationHookResult = ReturnType<typeof useSaveUserMutation>;
+export type SaveUserMutationResult = Apollo.MutationResult<SaveUserMutation>;
+export type SaveUserMutationOptions = Apollo.BaseMutationOptions<SaveUserMutation, SaveUserMutationVariables>;
 export const SaveGroupDocument = gql`
     mutation saveGroup($id: String!, $group: AddGroupDto!) {
   saveGroup(id: $id, group: $group) {
