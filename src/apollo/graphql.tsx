@@ -42,6 +42,7 @@ export type Mutation = {
   saveUser: UserModel;
   addGroupByUser: UserModel;
   saveGroup: GroupModel;
+  updateGroup: GroupModel;
 };
 
 
@@ -58,6 +59,11 @@ export type MutationAddGroupByUserArgs = {
 export type MutationSaveGroupArgs = {
   group: AddGroupDto;
   id: Scalars['String'];
+};
+
+
+export type MutationUpdateGroupArgs = {
+  group: UpdateGroupDto;
 };
 
 export type Query = {
@@ -86,6 +92,12 @@ export type QueryUsersByGroupArgs = {
 
 export type QueryGroupArgs = {
   id: Scalars['Int'];
+};
+
+export type UpdateGroupDto = {
+  id: Scalars['Float'];
+  name: Scalars['String'];
+  iconUrl: Scalars['String'];
 };
 
 export type UserModel = {
@@ -126,6 +138,19 @@ export type SaveGroupMutation = (
   & { saveGroup: (
     { __typename?: 'GroupModel' }
     & Pick<GroupModel, 'name' | 'iconUrl'>
+  ) }
+);
+
+export type UpdateGroupMutationVariables = Exact<{
+  group: UpdateGroupDto;
+}>;
+
+
+export type UpdateGroupMutation = (
+  { __typename?: 'Mutation' }
+  & { updateGroup: (
+    { __typename?: 'GroupModel' }
+    & Pick<GroupModel, 'id' | 'name' | 'iconUrl'>
   ) }
 );
 
@@ -226,6 +251,41 @@ export function useSaveGroupMutation(baseOptions?: Apollo.MutationHookOptions<Sa
 export type SaveGroupMutationHookResult = ReturnType<typeof useSaveGroupMutation>;
 export type SaveGroupMutationResult = Apollo.MutationResult<SaveGroupMutation>;
 export type SaveGroupMutationOptions = Apollo.BaseMutationOptions<SaveGroupMutation, SaveGroupMutationVariables>;
+export const UpdateGroupDocument = gql`
+    mutation updateGroup($group: UpdateGroupDto!) {
+  updateGroup(group: $group) {
+    id
+    name
+    iconUrl
+  }
+}
+    `;
+export type UpdateGroupMutationFn = Apollo.MutationFunction<UpdateGroupMutation, UpdateGroupMutationVariables>;
+
+/**
+ * __useUpdateGroupMutation__
+ *
+ * To run a mutation, you first call `useUpdateGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateGroupMutation, { data, loading, error }] = useUpdateGroupMutation({
+ *   variables: {
+ *      group: // value for 'group'
+ *   },
+ * });
+ */
+export function useUpdateGroupMutation(baseOptions?: Apollo.MutationHookOptions<UpdateGroupMutation, UpdateGroupMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateGroupMutation, UpdateGroupMutationVariables>(UpdateGroupDocument, options);
+      }
+export type UpdateGroupMutationHookResult = ReturnType<typeof useUpdateGroupMutation>;
+export type UpdateGroupMutationResult = Apollo.MutationResult<UpdateGroupMutation>;
+export type UpdateGroupMutationOptions = Apollo.BaseMutationOptions<UpdateGroupMutation, UpdateGroupMutationVariables>;
 export const GroupsByUserDocument = gql`
     query groupsByUser($id: String!) {
   groupsByUser(id: $id) {
