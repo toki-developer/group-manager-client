@@ -98,27 +98,34 @@ export const GroupAddForm = (props: Props) => {
       </div>
       <div className="flex justify-between flex-col md:flex-row ">
         <label>
-          <input
-            {...register("name", { required: true })}
-            className="bg-black outline-none border-b border-gray-500 p-2"
-            placeholder="グループ名を入力"
-          />
+          <div className="border-b border-gray-500">
+            <span className="text-gray-300 text-sm mr-2">グループ名</span>
+            <input
+              {...register("name", { required: true })}
+              className="bg-black outline-none p-2"
+              placeholder="グループ名を入力"
+            />
+          </div>
           {errors.name && (
             <p className="text-red-500 text-xs mt-2">※入力必須です</p>
           )}
         </label>
-        <button className="text-white-500 font-semibold h-10 mx-auto md:mx-0 mt-10 md:mt-0 py-2 px-14 border border-none bg-green-500 rounded-full w-64">
+        <label
+          htmlFor="add"
+          className="text-center text-white-500 font-semibold h-10 mx-auto md:mx-0 mt-10 md:mt-0 py-2 px-14  bg-green-500 rounded-full w-64"
+        >
           {loading ? (
             <span className="text-green-100">グループ作成中..</span>
           ) : (
             <input
               type="submit"
-              className="bg-transparent outline-none "
+              className="bg-transparent"
               onClick={handleClick}
               value="新規グループ作成"
+              id="add"
             />
           )}
-        </button>
+        </label>
       </div>
     </div>
   );

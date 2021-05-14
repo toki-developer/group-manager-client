@@ -42,6 +42,7 @@ export type Mutation = {
   saveUser: UserModel;
   addGroupByUser: UserModel;
   saveGroup: GroupModel;
+  updateGroup: GroupModel;
 };
 
 
@@ -58,6 +59,11 @@ export type MutationAddGroupByUserArgs = {
 export type MutationSaveGroupArgs = {
   group: AddGroupDto;
   id: Scalars['String'];
+};
+
+
+export type MutationUpdateGroupArgs = {
+  group: UpdateGroupDto;
 };
 
 export type Query = {
@@ -88,13 +94,19 @@ export type QueryGroupArgs = {
   id: Scalars['Int'];
 };
 
+export type UpdateGroupDto = {
+  id: Scalars['Float'];
+  name: Scalars['String'];
+  iconUrl: Scalars['String'];
+};
+
 export type UserModel = {
   __typename?: 'UserModel';
   id: Scalars['String'];
   name: Scalars['String'];
   iconUrl: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
+  createdAt?: Maybe<Scalars['DateTime']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
 export type AddGroupByUserDto = {
@@ -129,6 +141,19 @@ export type SaveGroupMutation = (
   ) }
 );
 
+export type UpdateGroupMutationVariables = Exact<{
+  group: UpdateGroupDto;
+}>;
+
+
+export type UpdateGroupMutation = (
+  { __typename?: 'Mutation' }
+  & { updateGroup: (
+    { __typename?: 'GroupModel' }
+    & Pick<GroupModel, 'id' | 'name' | 'iconUrl'>
+  ) }
+);
+
 export type GroupsByUserQueryVariables = Exact<{
   id: Scalars['String'];
 }>;
@@ -140,6 +165,19 @@ export type GroupsByUserQuery = (
     { __typename?: 'GroupModel' }
     & Pick<GroupModel, 'id' | 'name' | 'iconUrl' | 'createdAt' | 'updatedAt'>
   )>> }
+);
+
+export type UserQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type UserQuery = (
+  { __typename?: 'Query' }
+  & { user?: Maybe<(
+    { __typename?: 'UserModel' }
+    & Pick<UserModel, 'id' | 'name' | 'iconUrl'>
+  )> }
 );
 
 
@@ -213,6 +251,41 @@ export function useSaveGroupMutation(baseOptions?: Apollo.MutationHookOptions<Sa
 export type SaveGroupMutationHookResult = ReturnType<typeof useSaveGroupMutation>;
 export type SaveGroupMutationResult = Apollo.MutationResult<SaveGroupMutation>;
 export type SaveGroupMutationOptions = Apollo.BaseMutationOptions<SaveGroupMutation, SaveGroupMutationVariables>;
+export const UpdateGroupDocument = gql`
+    mutation updateGroup($group: UpdateGroupDto!) {
+  updateGroup(group: $group) {
+    id
+    name
+    iconUrl
+  }
+}
+    `;
+export type UpdateGroupMutationFn = Apollo.MutationFunction<UpdateGroupMutation, UpdateGroupMutationVariables>;
+
+/**
+ * __useUpdateGroupMutation__
+ *
+ * To run a mutation, you first call `useUpdateGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateGroupMutation, { data, loading, error }] = useUpdateGroupMutation({
+ *   variables: {
+ *      group: // value for 'group'
+ *   },
+ * });
+ */
+export function useUpdateGroupMutation(baseOptions?: Apollo.MutationHookOptions<UpdateGroupMutation, UpdateGroupMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateGroupMutation, UpdateGroupMutationVariables>(UpdateGroupDocument, options);
+      }
+export type UpdateGroupMutationHookResult = ReturnType<typeof useUpdateGroupMutation>;
+export type UpdateGroupMutationResult = Apollo.MutationResult<UpdateGroupMutation>;
+export type UpdateGroupMutationOptions = Apollo.BaseMutationOptions<UpdateGroupMutation, UpdateGroupMutationVariables>;
 export const GroupsByUserDocument = gql`
     query groupsByUser($id: String!) {
   groupsByUser(id: $id) {
@@ -252,3 +325,40 @@ export function useGroupsByUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type GroupsByUserQueryHookResult = ReturnType<typeof useGroupsByUserQuery>;
 export type GroupsByUserLazyQueryHookResult = ReturnType<typeof useGroupsByUserLazyQuery>;
 export type GroupsByUserQueryResult = Apollo.QueryResult<GroupsByUserQuery, GroupsByUserQueryVariables>;
+export const UserDocument = gql`
+    query user($id: String!) {
+  user(id: $id) {
+    id
+    name
+    iconUrl
+  }
+}
+    `;
+
+/**
+ * __useUserQuery__
+ *
+ * To run a query within a React component, call `useUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useUserQuery(baseOptions: Apollo.QueryHookOptions<UserQuery, UserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserQuery, UserQueryVariables>(UserDocument, options);
+      }
+export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQuery, UserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserQuery, UserQueryVariables>(UserDocument, options);
+        }
+export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
+export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
+export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;

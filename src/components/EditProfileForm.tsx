@@ -7,21 +7,24 @@ import { Icon } from "src/components/shared/Icon";
 import { UserContext } from "src/contexts/UserContext";
 
 export const EditProfileForm = () => {
+  const { user } = useContext(UserContext);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<AddUserDto>({
     defaultValues: {
-      name: "",
+      name: user.name,
     },
   });
-  const { user } = useContext(UserContext);
   const [file, setFile] = useState<File>();
   const [saveUser] = useSaveUserMutation();
   const [loading, setLoading] = useState(false);
   const uploadImg = useCallback(async (file: File) => {
-    const fileName = Math.random().toString(32).substring(2); // Todo:nanoidにする
+    const fileName =
+      user.iconUrl !== ""
+        ? user.iconUrl.substr(user.iconUrl.indexOf("IconImage/") + 10)
+        : Math.random().toString(32).substring(2); // Todo:nanoidにする
     const res = await fetch(`/api/upload?file=${fileName}`);
     const { url, fields } = await res.json();
     const body = new FormData();
@@ -37,7 +40,7 @@ export const EditProfileForm = () => {
   const handleClick = handleSubmit(async (data) => {
     setLoading(true);
     const iconUrl = file ? await uploadImg(file) : undefined;
-    data.iconUrl = iconUrl ?? "/none_icon.png";
+    data.iconUrl = iconUrl ?? user.iconUrl;
     data.id = "tokitoki";
     saveUser({ variables: { user: data } });
     setLoading(false);
@@ -51,7 +54,10 @@ export const EditProfileForm = () => {
         {file ? (
           <Icon iconUrl={window.URL.createObjectURL(file)} size="large" />
         ) : (
-          <Icon iconUrl="/none_icon.png" size="large" />
+          <Icon
+            iconUrl={user.iconUrl !== "" ? user.iconUrl : "/none_icon.png"}
+            size="large"
+          />
         )}
         <label htmlFor="icon" className="ml-7">
           <input
@@ -68,27 +74,34 @@ export const EditProfileForm = () => {
       </div>
       <div className="flex justify-between flex-col md:flex-row ">
         <label>
-          <input
-            {...register("name", { required: true })}
-            className="bg-black outline-none border-b border-gray-500 p-2"
-            placeholder="名前を入力"
-          />
+          <div className="border-b border-gray-500">
+            <span className="text-gray-300 text-sm mr-2">名前</span>
+            <input
+              {...register("name", { required: true })}
+              className="bg-black outline-none p-2"
+              placeholder="名前を入力"
+            />
+          </div>
           {errors.name && (
             <p className="text-red-500 text-xs mt-2">※入力必須です</p>
           )}
         </label>
-        <button className="text-white-500 font-semibold h-10 mx-auto md:mx-0 mt-10 md:mt-0 py-2 px-14 border border-none bg-green-500 rounded-full w-48">
+        <label
+          htmlFor="update"
+          className="text-center text-white-500 font-semibold h-10 mx-auto md:mx-0 mt-10 md:mt-0 py-2 px-14  bg-green-500 rounded-full w-48"
+        >
           {loading ? (
             <span className="text-green-100">更新中..</span>
           ) : (
             <input
               type="submit"
-              className="bg-transparent outline-none "
+              className="bg-transparent"
               onClick={handleClick}
               value="更新"
+              id="update"
             />
           )}
-        </button>
+        </label>
       </div>
     </div>
   );
