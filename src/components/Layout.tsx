@@ -1,8 +1,23 @@
+import Link from "next/link";
 import type { ReactNode } from "react";
+import { useContext } from "react";
 import { FixedMenu } from "src/components/FixedMenu";
 import { SideMenu } from "src/components/SideMenu";
+import { UserContext } from "src/contexts/UserContext";
 
 export const Layout = (props: { children: ReactNode }) => {
+  const { user, loading } = useContext(UserContext);
+
+  if (loading) {
+    return <div>loading...</div>;
+  }
+  if (user.id == "") {
+    return (
+      <div>
+        <Link href="/api/auth/login">ログイン</Link>
+      </div>
+    );
+  }
   return (
     <div className={"min-h-screen bg-black"}>
       <div className={"max-w-3xl mx-auto lg:grid lg:max-w-6xl lg:grid-cols-12"}>
