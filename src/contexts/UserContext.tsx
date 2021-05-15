@@ -7,6 +7,7 @@ import { useUserQuery } from "src/apollo/graphql";
 
 type Context = {
   user: UserModel;
+  loading: boolean;
 };
 export const UserContext = createContext<Context>({
   user: {
@@ -14,6 +15,7 @@ export const UserContext = createContext<Context>({
     name: "",
     iconUrl: "",
   },
+  loading: false,
 });
 
 export const UserContextProvider: VFC<{ children: ReactNode }> = (props) => {
@@ -22,18 +24,23 @@ export const UserContextProvider: VFC<{ children: ReactNode }> = (props) => {
     name: "",
     iconUrl: "",
   });
-  const { data } = useUserQuery({ variables: { id: "tokitoki" } });
+  const { user } = useUser();
+  const { data, loading } = useUserQuery({
+    variables: {
+      id: user?.sub ? user?.sub : "",
+    },
+    skip: user?.sub == undefined,
+  });
   useEffect(() => {
     setUserValue({
       id: data?.user ? data.user.id : "",
       name: data?.user ? data.user.name : "",
       iconUrl: data?.user ? data.user.iconUrl : "",
     });
-  }, [data?.user]);
-  const value = {
-    user: userValue,
-  };
-  return <UserContext.Provider value={value} {...props} />;
+  }, [data]);
+  return (
+    <UserContext.Provider value={{ user: userValue, loading }} {...props} />
+  );
 };
 
 export const UserContextProviders: VFC<{ children: ReactNode }> = (props) => {
