@@ -12,6 +12,7 @@ export const GroupList = () => {
   const { user } = useContext(UserContext);
   const { data, loading, refetch } = useGroupsByUserQuery({
     variables: { id: user.id },
+    skip: user.id == "",
   });
   const handleAddGroup = () => {
     setShowForm(true);
