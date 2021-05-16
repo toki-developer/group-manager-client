@@ -40,9 +40,12 @@ export const EditProfileForm = () => {
   const handleClick = handleSubmit(async (data) => {
     setLoading(true);
     const iconUrl = file ? await uploadImg(file) : undefined;
-    data.iconUrl = iconUrl ?? user.iconUrl;
-    data.id = "tokitoki";
-    saveUser({ variables: { user: data } });
+    const addUserData = {
+      id: user.id,
+      name: data.name,
+      iconUrl: iconUrl ?? user.iconUrl,
+    };
+    saveUser({ variables: { user: addUserData } });
     setLoading(false);
   });
   const handleChangeFile = (e: any) => {
