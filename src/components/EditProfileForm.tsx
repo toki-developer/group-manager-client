@@ -1,5 +1,5 @@
 import gql from "graphql-tag";
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import type { AddUserDto } from "src/apollo/graphql";
 import { useSaveUserMutation } from "src/apollo/graphql";
@@ -12,11 +12,8 @@ export const EditProfileForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<AddUserDto>({
-    defaultValues: {
-      name: user.name,
-    },
-  });
+    setValue,
+  } = useForm<AddUserDto>();
   const [file, setFile] = useState<File>();
   const [saveUser] = useSaveUserMutation();
   const [loading, setLoading] = useState(false);
@@ -51,6 +48,9 @@ export const EditProfileForm = () => {
   const handleChangeFile = (e: any) => {
     setFile(e.target.files[0]);
   };
+  useEffect(() => {
+    setValue("name", user.name);
+  }, [user]);
   return (
     <div className="m-5 md:m-10">
       <div className="flex items-center mb-4">
