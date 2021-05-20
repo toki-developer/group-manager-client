@@ -46,8 +46,11 @@ export const GroupAddForm = (props: Props) => {
   const handleClick = handleSubmit(async (data) => {
     setLoading(true);
     const iconUrl = file ? await uploadImg(file) : undefined;
-    data.iconUrl = iconUrl ?? "/none_icon.png";
-    saveGroup({ variables: { id: user.id, group: data } });
+    const groupData = {
+      name: data.name,
+      iconUrl: iconUrl ?? "",
+    };
+    saveGroup({ variables: { id: user.id, group: groupData } });
     props.onHandleClose();
     setLoading(false);
   });

@@ -1,10 +1,9 @@
 import gql from "graphql-tag";
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import type { GroupModel, UpdateGroupDto } from "src/apollo/graphql";
 import { useUpdateGroupMutation } from "src/apollo/graphql";
 import { Icon } from "src/components/shared/Icon";
-import { UserContext } from "src/contexts/UserContext";
 
 type Props = {
   onHandleClose: () => void;
@@ -21,7 +20,6 @@ export const GroupEditForm = (props: Props) => {
       name: props.groupItem.name,
     },
   });
-  const { user } = useContext(UserContext);
   const [file, setFile] = useState<File>();
   const [updateGroup] = useUpdateGroupMutation();
   const [loading, setLoading] = useState(false);
@@ -47,9 +45,12 @@ export const GroupEditForm = (props: Props) => {
   const handleClick = handleSubmit(async (data) => {
     setLoading(true);
     const iconUrl = file ? await uploadImg(file) : undefined;
-    data.iconUrl = iconUrl ?? props.groupItem.iconUrl;
-    data.id = props.groupItem.id;
-    updateGroup({ variables: { group: data } });
+    const groupData = {
+      id: props.groupItem.id,
+      name: data.name,
+      iconUrl: iconUrl ?? props.groupItem.iconUrl,
+    };
+    updateGroup({ variables: { group: groupData } });
     props.onHandleClose();
     setLoading(false);
   });
