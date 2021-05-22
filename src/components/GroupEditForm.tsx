@@ -1,4 +1,5 @@
 import gql from "graphql-tag";
+import { nanoid } from "nanoid";
 import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import type { GroupModel, UpdateGroupDto } from "src/apollo/graphql";
@@ -23,25 +24,28 @@ export const GroupEditForm = (props: Props) => {
   const [file, setFile] = useState<File>();
   const [updateGroup] = useUpdateGroupMutation();
   const [loading, setLoading] = useState(false);
-  const uploadImg = useCallback(async (file: File) => {
-    const fileName =
-      props.groupItem.iconUrl !== ""
-        ? props.groupItem.iconUrl.substr(
-            props.groupItem.iconUrl.indexOf("IconImage/") + 10
-          )
-        : Math.random().toString(32).substring(2); // Todo:nanoidにする
-    const res = await fetch(`/api/upload?file=${fileName}`);
-    const { url, fields } = await res.json();
-    const body = new FormData();
-    Object.entries({ ...fields, file }).forEach(([key, value]) => {
-      body.append(key, value as string | Blob);
-    });
-    const upload = await fetch(url, { method: "POST", body });
-    if (!upload.ok) {
-      alert("エラー");
-    }
-    return url + "IconImage/" + fileName;
-  }, []);
+  const uploadImg = useCallback(
+    async (file: File) => {
+      const fileName =
+        props.groupItem.iconUrl !== ""
+          ? props.groupItem.iconUrl.substr(
+              props.groupItem.iconUrl.indexOf("IconImage/") + 10
+            )
+          : nanoid();
+      const res = await fetch(`/api/upload?file=${fileName}`);
+      const { url, fields } = await res.json();
+      const body = new FormData();
+      Object.entries({ ...fields, file }).forEach(([key, value]) => {
+        body.append(key, value as string | Blob);
+      });
+      const upload = await fetch(url, { method: "POST", body });
+      if (!upload.ok) {
+        alert("エラー");
+      }
+      return url + "IconImage/" + fileName;
+    },
+    [props.groupItem.iconUrl]
+  );
   const handleClick = handleSubmit(async (data) => {
     setLoading(true);
     const iconUrl = file ? await uploadImg(file) : undefined;

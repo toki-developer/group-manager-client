@@ -67,10 +67,9 @@ gql`
   query groupsByUser($id: String!) {
     groupsByUser(id: $id) {
       id
+      searchId
       name
       iconUrl
-      createdAt
-      updatedAt
     }
   }
 `;

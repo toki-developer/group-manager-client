@@ -1,4 +1,5 @@
 import gql from "graphql-tag";
+import { nanoid } from "nanoid";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import type { AddUserDto } from "src/apollo/graphql";
@@ -17,23 +18,26 @@ export const EditProfileForm = () => {
   const [file, setFile] = useState<File>();
   const [saveUser] = useSaveUserMutation();
   const [loading, setLoading] = useState(false);
-  const uploadImg = useCallback(async (file: File) => {
-    const fileName =
-      user.iconUrl !== ""
-        ? user.iconUrl.substr(user.iconUrl.indexOf("IconImage/") + 10)
-        : Math.random().toString(32).substring(2); // Todo:nanoidにする
-    const res = await fetch(`/api/upload?file=${fileName}`);
-    const { url, fields } = await res.json();
-    const body = new FormData();
-    Object.entries({ ...fields, file }).forEach(([key, value]) => {
-      body.append(key, value as string | Blob);
-    });
-    const upload = await fetch(url, { method: "POST", body });
-    if (!upload.ok) {
-      alert("エラー");
-    }
-    return url + "IconImage/" + fileName;
-  }, []);
+  const uploadImg = useCallback(
+    async (file: File) => {
+      const fileName =
+        user.iconUrl !== ""
+          ? user.iconUrl.substr(user.iconUrl.indexOf("IconImage/") + 10)
+          : nanoid();
+      const res = await fetch(`/api/upload?file=${fileName}`);
+      const { url, fields } = await res.json();
+      const body = new FormData();
+      Object.entries({ ...fields, file }).forEach(([key, value]) => {
+        body.append(key, value as string | Blob);
+      });
+      const upload = await fetch(url, { method: "POST", body });
+      if (!upload.ok) {
+        alert("エラー");
+      }
+      return url + "IconImage/" + fileName;
+    },
+    [user.iconUrl]
+  );
   const handleClick = handleSubmit(async (data) => {
     setLoading(true);
     const iconUrl = file ? await uploadImg(file) : undefined;
@@ -50,7 +54,7 @@ export const EditProfileForm = () => {
   };
   useEffect(() => {
     setValue("name", user.name);
-  }, [user]);
+  }, [user.name, setValue]);
   return (
     <div className="m-5 md:m-10">
       <div className="flex items-center mb-4">

@@ -31,6 +31,7 @@ export type AddUserDto = {
 export type GroupModel = {
   __typename?: 'GroupModel';
   id: Scalars['Int'];
+  searchId: Scalars['String'];
   name: Scalars['String'];
   iconUrl: Scalars['String'];
   createdAt: Scalars['DateTime'];
@@ -58,7 +59,7 @@ export type MutationAddGroupByUserArgs = {
 
 export type MutationSaveGroupArgs = {
   group: AddGroupDto;
-  id: Scalars['String'];
+  userId: Scalars['String'];
 };
 
 
@@ -71,7 +72,7 @@ export type Query = {
   user?: Maybe<UserModel>;
   groupsByUser?: Maybe<Array<GroupModel>>;
   usersByGroup?: Maybe<Array<UserModel>>;
-  group?: Maybe<GroupModel>;
+  joinGroup?: Maybe<GroupModel>;
 };
 
 
@@ -90,8 +91,9 @@ export type QueryUsersByGroupArgs = {
 };
 
 
-export type QueryGroupArgs = {
-  id: Scalars['Int'];
+export type QueryJoinGroupArgs = {
+  searchId: Scalars['String'];
+  userId: Scalars['String'];
 };
 
 export type UpdateGroupDto = {
@@ -128,7 +130,7 @@ export type SaveUserMutation = (
 );
 
 export type SaveGroupMutationVariables = Exact<{
-  id: Scalars['String'];
+  userId: Scalars['String'];
   group: AddGroupDto;
 }>;
 
@@ -163,7 +165,7 @@ export type GroupsByUserQuery = (
   { __typename?: 'Query' }
   & { groupsByUser?: Maybe<Array<(
     { __typename?: 'GroupModel' }
-    & Pick<GroupModel, 'id' | 'name' | 'iconUrl' | 'createdAt' | 'updatedAt'>
+    & Pick<GroupModel, 'id' | 'searchId' | 'name' | 'iconUrl' | 'createdAt' | 'updatedAt'>
   )>> }
 );
 
@@ -217,8 +219,8 @@ export type SaveUserMutationHookResult = ReturnType<typeof useSaveUserMutation>;
 export type SaveUserMutationResult = Apollo.MutationResult<SaveUserMutation>;
 export type SaveUserMutationOptions = Apollo.BaseMutationOptions<SaveUserMutation, SaveUserMutationVariables>;
 export const SaveGroupDocument = gql`
-    mutation saveGroup($id: String!, $group: AddGroupDto!) {
-  saveGroup(id: $id, group: $group) {
+    mutation saveGroup($userId: String!, $group: AddGroupDto!) {
+  saveGroup(userId: $userId, group: $group) {
     name
     iconUrl
   }
@@ -239,7 +241,7 @@ export type SaveGroupMutationFn = Apollo.MutationFunction<SaveGroupMutation, Sav
  * @example
  * const [saveGroupMutation, { data, loading, error }] = useSaveGroupMutation({
  *   variables: {
- *      id: // value for 'id'
+ *      userId: // value for 'userId'
  *      group: // value for 'group'
  *   },
  * });
@@ -290,6 +292,7 @@ export const GroupsByUserDocument = gql`
     query groupsByUser($id: String!) {
   groupsByUser(id: $id) {
     id
+    searchId
     name
     iconUrl
     createdAt
