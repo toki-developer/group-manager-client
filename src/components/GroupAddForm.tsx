@@ -1,4 +1,5 @@
 import gql from "graphql-tag";
+import { nanoid } from "nanoid";
 import { useCallback, useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import type { AddGroupDto } from "src/apollo/graphql";
@@ -50,7 +51,7 @@ export const GroupAddForm = (props: Props) => {
       name: data.name,
       iconUrl: iconUrl ?? "",
     };
-    saveGroup({ variables: { id: user.id, group: groupData } });
+    saveGroup({ variables: { userId: user.id, group: groupData } });
     props.onHandleClose();
     setLoading(false);
   });
@@ -135,8 +136,8 @@ export const GroupAddForm = (props: Props) => {
 };
 
 gql`
-  mutation saveGroup($id: String!, $group: AddGroupDto!) {
-    saveGroup(id: $id, group: $group) {
+  mutation saveGroup($userId: String!, $group: AddGroupDto!) {
+    saveGroup(userId: $userId, group: $group) {
       name
       iconUrl
     }
