@@ -30,7 +30,7 @@ export const GroupAddForm = (props: Props) => {
   });
   const [loading, setLoading] = useState(false);
   const uploadImg = useCallback(async (file: File) => {
-    const fileName = Math.random().toString(32).substring(2); // Todo:nanoidにする
+    const fileName = nanoid();
     const res = await fetch(`/api/upload?file=${fileName}`);
     const { url, fields } = await res.json();
     const body = new FormData();

@@ -21,18 +21,8 @@ export const EditProfileForm = () => {
     const fileName =
       user.iconUrl !== ""
         ? user.iconUrl.substr(user.iconUrl.indexOf("IconImage/") + 10)
-        : Math.random().toString(32).substring(2); // Todo:nanoidにする
-    const res = await fetch(`/api/upload?file=${fileName}`);
-    const { url, fields } = await res.json();
-    const body = new FormData();
-    Object.entries({ ...fields, file }).forEach(([key, value]) => {
-      body.append(key, value as string | Blob);
-    });
-    const upload = await fetch(url, { method: "POST", body });
-    if (!upload.ok) {
-      alert("エラー");
-    }
-    return url + "IconImage/" + fileName;
+          : nanoid();
+      const res = await fetch(`/api/upload?file=${fileName}`);
   }, []);
   const handleClick = handleSubmit(async (data) => {
     setLoading(true);
