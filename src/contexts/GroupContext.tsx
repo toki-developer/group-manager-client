@@ -10,6 +10,7 @@ type Context = {
 export const GroupContext = createContext<Context>({
   group: {
     id: 0,
+    searchId: "",
     name: "",
     iconUrl: "/none_icon.png",
     createdAt: "",
@@ -25,6 +26,7 @@ export const GroupContextProvider: VFC<{ children: ReactNode }> = (props) => {
   useEffect(() => {
     setGroup({
       id: 0,
+      searchId: "",
       name: "",
       iconUrl: "/none_icon.png",
       createdAt: "",
