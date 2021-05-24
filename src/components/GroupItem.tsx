@@ -39,7 +39,7 @@ export const GroupItem = (props: Props) => {
         onKeyDown={handleGroup}
         role="presentation"
       >
-        <div className={"flex items-center"}>
+        <div className={"flex items-center relative"}>
           <Icon
             iconUrl={
               props.group.iconUrl !== ""
@@ -47,7 +47,12 @@ export const GroupItem = (props: Props) => {
                 : "/none_icon.png"
             }
           />
-          <div className={"ml-2"}>{props.group.name}</div>
+          <div className="ml-2">
+            {props.group.name}
+            <p className="text-xs text-gray-500 absolute bottom-1">
+              id:{props.group.searchId}
+            </p>
+          </div>
         </div>
         <div
           onClick={handleEditGroup}
