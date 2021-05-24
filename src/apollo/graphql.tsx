@@ -42,6 +42,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   saveUser: UserModel;
   addGroupByUser: UserModel;
+  joinGroup?: Maybe<GroupModel>;
   saveGroup: GroupModel;
   updateGroup: GroupModel;
 };
@@ -54,6 +55,12 @@ export type MutationSaveUserArgs = {
 
 export type MutationAddGroupByUserArgs = {
   affiliation: AddGroupByUserDto;
+};
+
+
+export type MutationJoinGroupArgs = {
+  searchId: Scalars['String'];
+  userId: Scalars['String'];
 };
 
 
@@ -72,7 +79,7 @@ export type Query = {
   user?: Maybe<UserModel>;
   groupsByUser?: Maybe<Array<GroupModel>>;
   usersByGroup?: Maybe<Array<UserModel>>;
-  joinGroup?: Maybe<GroupModel>;
+  findGroup: GroupModel;
 };
 
 
@@ -91,9 +98,8 @@ export type QueryUsersByGroupArgs = {
 };
 
 
-export type QueryJoinGroupArgs = {
+export type QueryFindGroupArgs = {
   searchId: Scalars['String'];
-  userId: Scalars['String'];
 };
 
 export type UpdateGroupDto = {
@@ -165,8 +171,21 @@ export type GroupsByUserQuery = (
   { __typename?: 'Query' }
   & { groupsByUser?: Maybe<Array<(
     { __typename?: 'GroupModel' }
-    & Pick<GroupModel, 'id' | 'searchId' | 'name' | 'iconUrl' | 'createdAt' | 'updatedAt'>
+    & Pick<GroupModel, 'id' | 'searchId' | 'name' | 'iconUrl'>
   )>> }
+);
+
+export type FindGroupQueryVariables = Exact<{
+  searchId: Scalars['String'];
+}>;
+
+
+export type FindGroupQuery = (
+  { __typename?: 'Query' }
+  & { findGroup: (
+    { __typename?: 'GroupModel' }
+    & Pick<GroupModel, 'name' | 'iconUrl'>
+  ) }
 );
 
 export type UserQueryVariables = Exact<{
@@ -295,8 +314,6 @@ export const GroupsByUserDocument = gql`
     searchId
     name
     iconUrl
-    createdAt
-    updatedAt
   }
 }
     `;
@@ -328,6 +345,42 @@ export function useGroupsByUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type GroupsByUserQueryHookResult = ReturnType<typeof useGroupsByUserQuery>;
 export type GroupsByUserLazyQueryHookResult = ReturnType<typeof useGroupsByUserLazyQuery>;
 export type GroupsByUserQueryResult = Apollo.QueryResult<GroupsByUserQuery, GroupsByUserQueryVariables>;
+export const FindGroupDocument = gql`
+    query findGroup($searchId: String!) {
+  findGroup(searchId: $searchId) {
+    name
+    iconUrl
+  }
+}
+    `;
+
+/**
+ * __useFindGroupQuery__
+ *
+ * To run a query within a React component, call `useFindGroupQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindGroupQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindGroupQuery({
+ *   variables: {
+ *      searchId: // value for 'searchId'
+ *   },
+ * });
+ */
+export function useFindGroupQuery(baseOptions: Apollo.QueryHookOptions<FindGroupQuery, FindGroupQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindGroupQuery, FindGroupQueryVariables>(FindGroupDocument, options);
+      }
+export function useFindGroupLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindGroupQuery, FindGroupQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindGroupQuery, FindGroupQueryVariables>(FindGroupDocument, options);
+        }
+export type FindGroupQueryHookResult = ReturnType<typeof useFindGroupQuery>;
+export type FindGroupLazyQueryHookResult = ReturnType<typeof useFindGroupLazyQuery>;
+export type FindGroupQueryResult = Apollo.QueryResult<FindGroupQuery, FindGroupQueryVariables>;
 export const UserDocument = gql`
     query user($id: String!) {
   user(id: $id) {

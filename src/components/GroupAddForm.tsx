@@ -4,6 +4,7 @@ import { useCallback, useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import type { AddGroupDto } from "src/apollo/graphql";
 import { useSaveGroupMutation } from "src/apollo/graphql";
+import { GroupSearchForm } from "src/components/GroupSearchForm";
 import { Icon } from "src/components/shared/Icon";
 import { UserContext } from "src/contexts/UserContext";
 
@@ -131,6 +132,8 @@ export const GroupAddForm = (props: Props) => {
           )}
         </label>
       </div>
+      <div className="border-b border-gray-800 mt-8 mb-5" />
+      <GroupSearchForm />
     </div>
   );
 };
