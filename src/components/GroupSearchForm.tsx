@@ -1,14 +1,26 @@
-import gql from "graphql-tag";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { GroupConfirmationForm } from "src/components/GroupConfirmationForm";
 
-export const GroupSearchForm = () => {
+export const GroupSearchForm = (props: { onHandleClose: () => void }) => {
+  const [isShowForm, setIsShowForm] = useState(false);
+  const [searchId, setSearchId] = useState("");
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<{ searchId: string }>();
+  const handleOpen = () => {
+    setIsShowForm(true);
+  };
+  const handleClose = () => {
+    setIsShowForm(false);
+  };
 
-  const handleClick = handleSubmit(async (data) => {});
+  const handleClick = handleSubmit(async (data) => {
+    setSearchId(data.searchId);
+    handleOpen();
+  });
   return (
     <div>
       <div className="text-green-300 text-sm">
@@ -45,15 +57,13 @@ export const GroupSearchForm = () => {
           />
         </label>
       </div>
+      {isShowForm && (
+        <GroupConfirmationForm
+          onHandleCloseRoot={props.onHandleClose}
+          onHandleClose={handleClose}
+          searchId={searchId}
+        />
+      )}
     </div>
   );
 };
-
-gql`
-  query findGroup($searchId: String!) {
-    findGroup(searchId: $searchId) {
-      name
-      iconUrl
-    }
-  }
-`;

@@ -133,7 +133,7 @@ export const GroupAddForm = (props: Props) => {
         </label>
       </div>
       <div className="border-b border-gray-800 mt-8 mb-5" />
-      <GroupSearchForm />
+      <GroupSearchForm onHandleClose={props.onHandleClose} />
     </div>
   );
 };

@@ -34,8 +34,8 @@ export type GroupModel = {
   searchId: Scalars['String'];
   name: Scalars['String'];
   iconUrl: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
+  createdAt?: Maybe<Scalars['DateTime']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
 export type Mutation = {
@@ -149,6 +149,33 @@ export type SaveGroupMutation = (
   ) }
 );
 
+export type FindGroupQueryVariables = Exact<{
+  searchId: Scalars['String'];
+}>;
+
+
+export type FindGroupQuery = (
+  { __typename?: 'Query' }
+  & { findGroup: (
+    { __typename?: 'GroupModel' }
+    & Pick<GroupModel, 'name' | 'iconUrl'>
+  ) }
+);
+
+export type JoinGroupMutationVariables = Exact<{
+  userId: Scalars['String'];
+  searchId: Scalars['String'];
+}>;
+
+
+export type JoinGroupMutation = (
+  { __typename?: 'Mutation' }
+  & { joinGroup?: Maybe<(
+    { __typename?: 'GroupModel' }
+    & Pick<GroupModel, 'searchId'>
+  )> }
+);
+
 export type UpdateGroupMutationVariables = Exact<{
   group: UpdateGroupDto;
 }>;
@@ -173,19 +200,6 @@ export type GroupsByUserQuery = (
     { __typename?: 'GroupModel' }
     & Pick<GroupModel, 'id' | 'searchId' | 'name' | 'iconUrl'>
   )>> }
-);
-
-export type FindGroupQueryVariables = Exact<{
-  searchId: Scalars['String'];
-}>;
-
-
-export type FindGroupQuery = (
-  { __typename?: 'Query' }
-  & { findGroup: (
-    { __typename?: 'GroupModel' }
-    & Pick<GroupModel, 'name' | 'iconUrl'>
-  ) }
 );
 
 export type UserQueryVariables = Exact<{
@@ -272,6 +286,76 @@ export function useSaveGroupMutation(baseOptions?: Apollo.MutationHookOptions<Sa
 export type SaveGroupMutationHookResult = ReturnType<typeof useSaveGroupMutation>;
 export type SaveGroupMutationResult = Apollo.MutationResult<SaveGroupMutation>;
 export type SaveGroupMutationOptions = Apollo.BaseMutationOptions<SaveGroupMutation, SaveGroupMutationVariables>;
+export const FindGroupDocument = gql`
+    query findGroup($searchId: String!) {
+  findGroup(searchId: $searchId) {
+    name
+    iconUrl
+  }
+}
+    `;
+
+/**
+ * __useFindGroupQuery__
+ *
+ * To run a query within a React component, call `useFindGroupQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindGroupQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindGroupQuery({
+ *   variables: {
+ *      searchId: // value for 'searchId'
+ *   },
+ * });
+ */
+export function useFindGroupQuery(baseOptions: Apollo.QueryHookOptions<FindGroupQuery, FindGroupQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindGroupQuery, FindGroupQueryVariables>(FindGroupDocument, options);
+      }
+export function useFindGroupLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindGroupQuery, FindGroupQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindGroupQuery, FindGroupQueryVariables>(FindGroupDocument, options);
+        }
+export type FindGroupQueryHookResult = ReturnType<typeof useFindGroupQuery>;
+export type FindGroupLazyQueryHookResult = ReturnType<typeof useFindGroupLazyQuery>;
+export type FindGroupQueryResult = Apollo.QueryResult<FindGroupQuery, FindGroupQueryVariables>;
+export const JoinGroupDocument = gql`
+    mutation joinGroup($userId: String!, $searchId: String!) {
+  joinGroup(userId: $userId, searchId: $searchId) {
+    searchId
+  }
+}
+    `;
+export type JoinGroupMutationFn = Apollo.MutationFunction<JoinGroupMutation, JoinGroupMutationVariables>;
+
+/**
+ * __useJoinGroupMutation__
+ *
+ * To run a mutation, you first call `useJoinGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useJoinGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [joinGroupMutation, { data, loading, error }] = useJoinGroupMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      searchId: // value for 'searchId'
+ *   },
+ * });
+ */
+export function useJoinGroupMutation(baseOptions?: Apollo.MutationHookOptions<JoinGroupMutation, JoinGroupMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<JoinGroupMutation, JoinGroupMutationVariables>(JoinGroupDocument, options);
+      }
+export type JoinGroupMutationHookResult = ReturnType<typeof useJoinGroupMutation>;
+export type JoinGroupMutationResult = Apollo.MutationResult<JoinGroupMutation>;
+export type JoinGroupMutationOptions = Apollo.BaseMutationOptions<JoinGroupMutation, JoinGroupMutationVariables>;
 export const UpdateGroupDocument = gql`
     mutation updateGroup($group: UpdateGroupDto!) {
   updateGroup(group: $group) {
@@ -345,42 +429,6 @@ export function useGroupsByUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type GroupsByUserQueryHookResult = ReturnType<typeof useGroupsByUserQuery>;
 export type GroupsByUserLazyQueryHookResult = ReturnType<typeof useGroupsByUserLazyQuery>;
 export type GroupsByUserQueryResult = Apollo.QueryResult<GroupsByUserQuery, GroupsByUserQueryVariables>;
-export const FindGroupDocument = gql`
-    query findGroup($searchId: String!) {
-  findGroup(searchId: $searchId) {
-    name
-    iconUrl
-  }
-}
-    `;
-
-/**
- * __useFindGroupQuery__
- *
- * To run a query within a React component, call `useFindGroupQuery` and pass it any options that fit your needs.
- * When your component renders, `useFindGroupQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useFindGroupQuery({
- *   variables: {
- *      searchId: // value for 'searchId'
- *   },
- * });
- */
-export function useFindGroupQuery(baseOptions: Apollo.QueryHookOptions<FindGroupQuery, FindGroupQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<FindGroupQuery, FindGroupQueryVariables>(FindGroupDocument, options);
-      }
-export function useFindGroupLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindGroupQuery, FindGroupQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<FindGroupQuery, FindGroupQueryVariables>(FindGroupDocument, options);
-        }
-export type FindGroupQueryHookResult = ReturnType<typeof useFindGroupQuery>;
-export type FindGroupLazyQueryHookResult = ReturnType<typeof useFindGroupLazyQuery>;
-export type FindGroupQueryResult = Apollo.QueryResult<FindGroupQuery, FindGroupQueryVariables>;
 export const UserDocument = gql`
     query user($id: String!) {
   user(id: $id) {
