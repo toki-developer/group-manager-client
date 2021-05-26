@@ -6,7 +6,7 @@ import { MENU } from "src/utils/constants/menu";
 export const FixedMenu = () => {
   const router = useRouter();
   return (
-    <nav className={" flex justify-around"}>
+    <nav className="flex justify-around">
       {MENU.map((item) => {
         const isActive = item.href == router.pathname;
         return (

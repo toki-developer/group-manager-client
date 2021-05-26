@@ -6,8 +6,8 @@ import { MENU } from "src/utils/constants/menu";
 export const SideMenu = () => {
   const router = useRouter();
   return (
-    <div className={"fixed top-0"}>
-      <div className={" ml-7 my-10 text-xl"}>GroupManager</div>
+    <div className="fixed top-0">
+      <div className=" ml-7 my-10 text-xl">GroupManager</div>
       <nav>
         {MENU.map((item) => {
           const isActive = item.href === router.pathname;

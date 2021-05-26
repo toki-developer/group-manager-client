@@ -34,16 +34,16 @@ export const GroupList = () => {
         </>
       ) : null}
       <ul>
-        <li className={"border-b border-gray-900 hover:bg-gray-900"}>
+        <li className="border-b border-gray-900 hover:bg-gray-900">
           <div
-            className={"flex items-center justify-between"}
+            className="flex items-center justify-between"
             onClick={handleAddGroup}
             onKeyDown={handleAddGroup}
             role="presentation"
           >
-            <div className={"flex items-center"}>
-              <Icon iconUrl={"/group.png"} />
-              <div className={"ml-2"}>グループを追加</div>
+            <div className="flex items-center">
+              <Icon iconUrl="/group.png" />
+              <div className="ml-2">グループを追加</div>
             </div>
           </div>
         </li>
@@ -52,7 +52,7 @@ export const GroupList = () => {
             return (
               <li
                 key={value?.id}
-                className={"border-b border-gray-900 hover:bg-gray-900"}
+                className="border-b border-gray-900 hover:bg-gray-900"
               >
                 <GroupItem group={value} />
               </li>
