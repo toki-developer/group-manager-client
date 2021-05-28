@@ -4,6 +4,7 @@ import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import type { GroupModel, UpdateGroupDto } from "src/apollo/graphql";
 import { useUpdateGroupMutation } from "src/apollo/graphql";
+import { GroupWithdrawalButton } from "src/components/GroupWithdrawalButton";
 import { Icon } from "src/components/shared/Icon";
 
 type Props = {
@@ -141,6 +142,11 @@ export const GroupEditForm = (props: Props) => {
           )}
         </label>
       </div>
+      <div className="border-b border-gray-800 mt-8 mb-5" />
+      <GroupWithdrawalButton
+        id={props.groupItem.id}
+        onHandleClose={props.onHandleClose}
+      />
     </div>
   );
 };
