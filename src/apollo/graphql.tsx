@@ -43,6 +43,7 @@ export type Mutation = {
   saveUser: UserModel;
   addGroupByUser: UserModel;
   joinGroup?: Maybe<GroupModel>;
+  withdrawalGroup?: Maybe<UserModel>;
   saveGroup: GroupModel;
   updateGroup: GroupModel;
 };
@@ -60,6 +61,12 @@ export type MutationAddGroupByUserArgs = {
 
 export type MutationJoinGroupArgs = {
   searchId: Scalars['String'];
+  userId: Scalars['String'];
+};
+
+
+export type MutationWithdrawalGroupArgs = {
+  groupId: Scalars['Int'];
   userId: Scalars['String'];
 };
 
@@ -158,7 +165,7 @@ export type FindGroupQuery = (
   { __typename?: 'Query' }
   & { findGroup: (
     { __typename?: 'GroupModel' }
-    & Pick<GroupModel, 'name' | 'iconUrl'>
+    & Pick<GroupModel, 'id' | 'name' | 'iconUrl'>
   ) }
 );
 
@@ -200,6 +207,20 @@ export type GroupsByUserQuery = (
     { __typename?: 'GroupModel' }
     & Pick<GroupModel, 'id' | 'searchId' | 'name' | 'iconUrl'>
   )>> }
+);
+
+export type WithdrawalGroupMutationVariables = Exact<{
+  userId: Scalars['String'];
+  groupId: Scalars['Int'];
+}>;
+
+
+export type WithdrawalGroupMutation = (
+  { __typename?: 'Mutation' }
+  & { withdrawalGroup?: Maybe<(
+    { __typename?: 'UserModel' }
+    & Pick<UserModel, 'id' | 'name'>
+  )> }
 );
 
 export type UserQueryVariables = Exact<{
@@ -289,6 +310,7 @@ export type SaveGroupMutationOptions = Apollo.BaseMutationOptions<SaveGroupMutat
 export const FindGroupDocument = gql`
     query findGroup($searchId: String!) {
   findGroup(searchId: $searchId) {
+    id
     name
     iconUrl
   }
@@ -429,6 +451,41 @@ export function useGroupsByUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type GroupsByUserQueryHookResult = ReturnType<typeof useGroupsByUserQuery>;
 export type GroupsByUserLazyQueryHookResult = ReturnType<typeof useGroupsByUserLazyQuery>;
 export type GroupsByUserQueryResult = Apollo.QueryResult<GroupsByUserQuery, GroupsByUserQueryVariables>;
+export const WithdrawalGroupDocument = gql`
+    mutation withdrawalGroup($userId: String!, $groupId: Int!) {
+  withdrawalGroup(userId: $userId, groupId: $groupId) {
+    id
+    name
+  }
+}
+    `;
+export type WithdrawalGroupMutationFn = Apollo.MutationFunction<WithdrawalGroupMutation, WithdrawalGroupMutationVariables>;
+
+/**
+ * __useWithdrawalGroupMutation__
+ *
+ * To run a mutation, you first call `useWithdrawalGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useWithdrawalGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [withdrawalGroupMutation, { data, loading, error }] = useWithdrawalGroupMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      groupId: // value for 'groupId'
+ *   },
+ * });
+ */
+export function useWithdrawalGroupMutation(baseOptions?: Apollo.MutationHookOptions<WithdrawalGroupMutation, WithdrawalGroupMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<WithdrawalGroupMutation, WithdrawalGroupMutationVariables>(WithdrawalGroupDocument, options);
+      }
+export type WithdrawalGroupMutationHookResult = ReturnType<typeof useWithdrawalGroupMutation>;
+export type WithdrawalGroupMutationResult = Apollo.MutationResult<WithdrawalGroupMutation>;
+export type WithdrawalGroupMutationOptions = Apollo.BaseMutationOptions<WithdrawalGroupMutation, WithdrawalGroupMutationVariables>;
 export const UserDocument = gql`
     query user($id: String!) {
   user(id: $id) {
