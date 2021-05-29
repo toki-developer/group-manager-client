@@ -1,24 +1,23 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { GroupConfirmationForm } from "src/components/GroupConfirmationForm";
 
-export const GroupSearchForm = (props: { onHandleClose: () => void }) => {
-  const [isShowForm, setIsShowForm] = useState(false);
-  const [searchId, setSearchId] = useState("");
+type Props = {
+  onHandleClose: () => void;
+  setIsShowForm: (args: boolean) => void;
+  setSearchId: (args: string) => void;
+};
+
+export const GroupSearchForm = (props: Props) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<{ searchId: string }>();
   const handleOpen = () => {
-    setIsShowForm(true);
-  };
-  const handleClose = () => {
-    setIsShowForm(false);
+    props.setIsShowForm(true);
   };
 
   const handleClick = handleSubmit(async (data) => {
-    setSearchId(data.searchId);
+    props.setSearchId(data.searchId);
     handleOpen();
   });
   return (
@@ -57,13 +56,6 @@ export const GroupSearchForm = (props: { onHandleClose: () => void }) => {
           />
         </label>
       </div>
-      {isShowForm && (
-        <GroupConfirmationForm
-          onHandleCloseRoot={props.onHandleClose}
-          onHandleClose={handleClose}
-          searchId={searchId}
-        />
-      )}
     </div>
   );
 };

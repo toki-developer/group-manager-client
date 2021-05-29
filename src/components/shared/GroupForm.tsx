@@ -9,9 +9,10 @@ type Props = {
   groupItem?: UpdateGroupDto;
   func: (iconUrl: string, name: string) => void;
   title: string;
+  noChange?: boolean;
 };
 
-export const Form = (props: Props) => {
+export const GroupForm = (props: Props) => {
   const {
     register,
     handleSubmit,
@@ -56,7 +57,6 @@ export const Form = (props: Props) => {
       : "";
 
     props.func(iconUrl, data.name);
-
     props.onHandleClose();
     setLoading(false);
   });
@@ -100,18 +100,20 @@ export const Form = (props: Props) => {
             size="large"
           />
         )}
-        <label htmlFor="icon" className="ml-7">
-          <input
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={handleChangeFile}
-            id="icon"
-          />
-          <span className="bg-transparent  text-green-500 hover:text-green-400 font-semibold  py-2 px-4 border border-green-500 hover:border-green-400 rounded-full ">
-            アイコンを編集
-          </span>
-        </label>
+        {!props.noChange && (
+          <label htmlFor="icon" className="ml-7">
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleChangeFile}
+              id="icon"
+            />
+            <span className="bg-transparent  text-green-500 hover:text-green-400 font-semibold  py-2 px-4 border border-green-500 hover:border-green-400 rounded-full ">
+              アイコンを編集
+            </span>
+          </label>
+        )}
       </div>
       <div className="flex justify-between flex-col md:flex-row ">
         <label>
@@ -121,6 +123,7 @@ export const Form = (props: Props) => {
               {...register("name", { required: true })}
               className="bg-black outline-none p-2"
               placeholder="グループ名を入力"
+              readOnly={props.noChange}
             />
           </div>
           {errors.name && (

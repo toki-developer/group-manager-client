@@ -165,7 +165,7 @@ export type FindGroupQuery = (
   { __typename?: 'Query' }
   & { findGroup: (
     { __typename?: 'GroupModel' }
-    & Pick<GroupModel, 'name' | 'iconUrl'>
+    & Pick<GroupModel, 'id' | 'name' | 'iconUrl'>
   ) }
 );
 
@@ -310,6 +310,7 @@ export type SaveGroupMutationOptions = Apollo.BaseMutationOptions<SaveGroupMutat
 export const FindGroupDocument = gql`
     query findGroup($searchId: String!) {
   findGroup(searchId: $searchId) {
+    id
     name
     iconUrl
   }
