@@ -25,7 +25,7 @@ export const GroupConfirmationForm = (props: Props) => {
     props.onHandleCloseRoot();
   };
   return (
-    <div className="fixed top-0 md:top-28 p-6 bg-black border border-gray-600 h-full md:h-96 md:rounded-xl z-20 w-full md:max-w-3xl lg:max-w-screen-sm">
+    <div className="fixed top-0 md:top-28 z-20 p-6 w-full md:max-w-3xl lg:max-w-screen-sm h-full md:h-96 bg-black md:rounded-xl border border-gray-600">
       {data && (
         <GroupForm
           onHandleClose={props.onHandleClose}

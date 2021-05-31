@@ -7,7 +7,7 @@ export const SideMenu = () => {
   const router = useRouter();
   return (
     <div className="fixed top-0">
-      <div className=" ml-7 my-10 text-xl">GroupManager</div>
+      <div className="my-10 ml-7 text-xl ">GroupManager</div>
       <nav>
         {MENU.map((item) => {
           const isActive = item.href === router.pathname;
@@ -23,7 +23,7 @@ export const SideMenu = () => {
                 ])}
               >
                 <svg
-                  className="text-current flex-shrink-0 ml-7 mr-4 h-7 w-7"
+                  className="flex-shrink-0 mr-4 ml-7 w-7 h-7 text-current"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"

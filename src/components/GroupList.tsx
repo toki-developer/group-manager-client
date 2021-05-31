@@ -26,7 +26,7 @@ export const GroupList = () => {
         <>
           <GroupAddForm onHandleClose={handleClose} refetch={refetch} />
           <div
-            className="opacity-20 top-0 left-0 fixed w-full h-full  bg-white z-10"
+            className="fixed top-0 left-0 z-10 w-full h-full bg-white opacity-20"
             onClick={handleClose}
             onKeyDown={handleClose}
             role="presentation"
@@ -34,9 +34,9 @@ export const GroupList = () => {
         </>
       ) : null}
       <ul>
-        <li className="border-b border-gray-900 hover:bg-gray-900">
+        <li className="hover:bg-gray-900 border-b border-gray-900">
           <div
-            className="flex items-center justify-between"
+            className="flex justify-between items-center"
             onClick={handleAddGroup}
             onKeyDown={handleAddGroup}
             role="presentation"
@@ -52,7 +52,7 @@ export const GroupList = () => {
             return (
               <li
                 key={value?.id}
-                className="border-b border-gray-900 hover:bg-gray-900"
+                className="hover:bg-gray-900 border-b border-gray-900"
               >
                 <GroupItem group={value} />
               </li>
