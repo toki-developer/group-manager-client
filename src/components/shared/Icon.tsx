@@ -8,7 +8,7 @@ type Props = {
 
 export const Icon = (props: Props) => {
   return (
-    <div className="m-2 inline-block">
+    <div className="inline-block m-2">
       <img
         src={props.iconUrl}
         alt="icon"

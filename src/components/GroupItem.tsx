@@ -26,7 +26,7 @@ export const GroupItem = (props: Props) => {
         <>
           <GroupEditForm onHandleClose={handleClose} groupItem={props.group} />
           <div
-            className="opacity-20 top-0 left-0 fixed w-full h-full  bg-white z-10"
+            className="fixed top-0 left-0 z-10 w-full h-full bg-white opacity-20"
             onClick={handleClose}
             onKeyDown={handleClose}
             role="presentation"
@@ -49,7 +49,7 @@ export const GroupItem = (props: Props) => {
           />
           <div className="ml-2">
             {props.group.name}
-            <p className="text-xs text-gray-500 absolute bottom-1">
+            <p className="absolute bottom-1 text-xs text-gray-500">
               id:{props.group.searchId}
             </p>
           </div>
@@ -60,7 +60,7 @@ export const GroupItem = (props: Props) => {
           role="presentation"
         >
           <svg
-            className="text-gray-300 flex-shrink-0 ml-7 mr-4 h-7 w-7"
+            className="flex-shrink-0 mr-4 ml-7 w-7 h-7 text-gray-300"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"

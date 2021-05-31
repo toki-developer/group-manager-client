@@ -22,14 +22,14 @@ export const GroupSearchForm = (props: Props) => {
   });
   return (
     <div>
-      <div className="text-green-300 text-sm">
+      <div className="text-sm text-green-300">
         IDを入力して既存グループを検索
       </div>
       <div className="h-1" />
       <div className="flex">
         <label>
           <div className="border-b border-gray-500">
-            <span className="text-gray-300 text-sm mr-2">ID:</span>
+            <span className="mr-2 text-sm text-gray-300">ID:</span>
             <input
               {...register("searchId", {
                 required: "※IDを入力してください。",
@@ -37,17 +37,17 @@ export const GroupSearchForm = (props: Props) => {
                 maxLength: { value: 10, message: "10桁で入力してください" },
               })}
               placeholder="10桁のIDを入力"
-              className="bg-transparent outline-none p-2"
+              className="p-2 bg-transparent outline-none"
             />
           </div>
           {errors.searchId && (
-            <p className="text-red-500 text-xs mt-2">
+            <p className="mt-2 text-xs text-red-500">
               {errors.searchId.message}
             </p>
           )}
         </label>
         <div className="w-5" />
-        <label className="text-center text-white-500 font-semibold py-2 px-5 h-10 bg-green-500 rounded-2xl">
+        <label className="py-2 px-5 h-10 font-semibold text-center bg-green-500 rounded-2xl ">
           <input
             type="submit"
             onClick={handleClick}
