@@ -12,7 +12,7 @@ export const GroupContext = createContext<Context>({
     id: 0,
     searchId: "",
     name: "",
-    iconUrl: "/none_icon.png",
+    iconUrl: "",
     createdAt: "",
     updatedAt: "",
   },
@@ -28,7 +28,7 @@ export const GroupContextProvider: VFC<{ children: ReactNode }> = (props) => {
       id: 0,
       searchId: "",
       name: "",
-      iconUrl: "/none_icon.png",
+      iconUrl: "",
       createdAt: "",
       updatedAt: "",
     });

@@ -90,15 +90,7 @@ export const GroupForm = (props: Props) => {
         {file ? (
           <Icon iconUrl={window.URL.createObjectURL(file)} size="large" />
         ) : (
-          <Icon
-            iconUrl={
-              props.groupItem?.iconUrl !== "" &&
-              props.groupItem?.iconUrl !== undefined
-                ? props.groupItem?.iconUrl
-                : "/none_icon.png"
-            }
-            size="large"
-          />
+          <Icon iconUrl={props.groupItem?.iconUrl} size="large" />
         )}
         {!props.noChange && (
           <label htmlFor="icon" className="ml-7">

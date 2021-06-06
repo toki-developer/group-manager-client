@@ -61,10 +61,7 @@ export const EditProfileForm = () => {
         {file ? (
           <Icon iconUrl={window.URL.createObjectURL(file)} size="large" />
         ) : (
-          <Icon
-            iconUrl={user.iconUrl !== "" ? user.iconUrl : "/none_icon.png"}
-            size="large"
-          />
+          <Icon iconUrl={user.iconUrl} size="large" />
         )}
         <label htmlFor="icon" className="ml-7">
           <input
