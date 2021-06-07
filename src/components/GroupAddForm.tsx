@@ -8,7 +8,6 @@ import { UserContext } from "src/contexts/UserContext";
 
 type Props = {
   onHandleClose: () => void;
-  refetch: () => void;
 };
 
 export const GroupAddForm = (props: Props) => {
@@ -16,8 +15,15 @@ export const GroupAddForm = (props: Props) => {
   const [isShowForm, setIsShowForm] = useState(false);
   const [searchId, setSearchId] = useState("");
   const [saveGroup] = useSaveGroupMutation({
-    onCompleted() {
-      props.refetch();
+    update(cache, data) {
+      const newData = data.data?.saveGroup;
+      cache.modify({
+        fields: {
+          groupsByUser(existing = []) {
+            return [...existing, newData];
+          },
+        },
+      });
     },
   });
   const handleClose = () => {
@@ -25,7 +31,9 @@ export const GroupAddForm = (props: Props) => {
   };
 
   const funcSaveGroup = (iconUrl: string, name: string) => {
-    saveGroup({ variables: { userId: user.id, group: { name, iconUrl } } });
+    saveGroup({
+      variables: { userId: user.id, group: { name, iconUrl } },
+    });
   };
 
   return (
@@ -57,6 +65,8 @@ export const GroupAddForm = (props: Props) => {
 gql`
   mutation saveGroup($userId: String!, $group: AddGroupDto!) {
     saveGroup(userId: $userId, group: $group) {
+      id
+      searchId
       name
       iconUrl
     }
