@@ -1,9 +1,10 @@
 import type { NormalizedCacheObject } from "@apollo/client";
-import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
+import { ApolloClient, HttpLink } from "@apollo/client";
 import merge from "deepmerge";
 import isEqual from "lodash.isequal";
 import type { AppProps } from "next/app";
 import { useMemo } from "react";
+import { cache } from "src/apollo/cache";
 
 export const APOLLO_STATE_PROP_NAME = "__APOLLO_STATE__";
 
@@ -15,7 +16,7 @@ const createApolloClient = () => {
     link: new HttpLink({
       uri: "http://localhost:4000/graphql",
     }),
-    cache: new InMemoryCache(),
+    cache,
   });
 };
 

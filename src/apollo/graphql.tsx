@@ -43,7 +43,7 @@ export type Mutation = {
   saveUser: UserModel;
   addGroupByUser: UserModel;
   joinGroup?: Maybe<GroupModel>;
-  withdrawalGroup?: Maybe<UserModel>;
+  withdrawalGroup?: Maybe<GroupModel>;
   saveGroup: GroupModel;
   updateGroup: GroupModel;
 };
@@ -152,7 +152,7 @@ export type SaveGroupMutation = (
   { __typename?: 'Mutation' }
   & { saveGroup: (
     { __typename?: 'GroupModel' }
-    & Pick<GroupModel, 'name' | 'iconUrl'>
+    & Pick<GroupModel, 'id' | 'searchId' | 'name' | 'iconUrl'>
   ) }
 );
 
@@ -218,8 +218,8 @@ export type WithdrawalGroupMutationVariables = Exact<{
 export type WithdrawalGroupMutation = (
   { __typename?: 'Mutation' }
   & { withdrawalGroup?: Maybe<(
-    { __typename?: 'UserModel' }
-    & Pick<UserModel, 'id' | 'name'>
+    { __typename?: 'GroupModel' }
+    & Pick<GroupModel, 'id'>
   )> }
 );
 
@@ -275,6 +275,8 @@ export type SaveUserMutationOptions = Apollo.BaseMutationOptions<SaveUserMutatio
 export const SaveGroupDocument = gql`
     mutation saveGroup($userId: String!, $group: AddGroupDto!) {
   saveGroup(userId: $userId, group: $group) {
+    id
+    searchId
     name
     iconUrl
   }
@@ -455,7 +457,6 @@ export const WithdrawalGroupDocument = gql`
     mutation withdrawalGroup($userId: String!, $groupId: Int!) {
   withdrawalGroup(userId: $userId, groupId: $groupId) {
     id
-    name
   }
 }
     `;

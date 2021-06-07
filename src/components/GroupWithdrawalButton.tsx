@@ -9,7 +9,20 @@ type Props = {
 };
 export const GroupWithdrawalButton = (props: Props) => {
   const { user } = useContext(UserContext);
-  const [withdrawalGroup] = useWithdrawalGroupMutation();
+  const [withdrawalGroup] = useWithdrawalGroupMutation({
+    update(cache, data) {
+      cache.modify({
+        fields: {
+          groupsByUser(existing = [], { readField }) {
+            const newGroupList = existing.filter((item: any) => {
+              return readField("id", item) !== data.data?.withdrawalGroup?.id;
+            });
+            return [...newGroupList];
+          },
+        },
+      });
+    },
+  });
   const handleClick = () => {
     withdrawalGroup({ variables: { userId: user.id, groupId: props.id } });
     props.onHandleClose();
@@ -25,7 +38,6 @@ gql`
   mutation withdrawalGroup($userId: String!, $groupId: Int!) {
     withdrawalGroup(userId: $userId, groupId: $groupId) {
       id
-      name
     }
   }
 `;
