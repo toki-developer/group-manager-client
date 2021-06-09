@@ -179,7 +179,7 @@ export type JoinGroupMutation = (
   { __typename?: 'Mutation' }
   & { joinGroup?: Maybe<(
     { __typename?: 'GroupModel' }
-    & Pick<GroupModel, 'searchId'>
+    & Pick<GroupModel, 'id' | 'searchId'>
   )> }
 );
 
@@ -209,6 +209,11 @@ export type GroupsByUserQuery = (
   )>> }
 );
 
+export type GroupFragment = (
+  { __typename?: 'GroupModel' }
+  & Pick<GroupModel, 'id' | 'searchId' | 'name' | 'iconUrl'>
+);
+
 export type WithdrawalGroupMutationVariables = Exact<{
   userId: Scalars['String'];
   groupId: Scalars['Int'];
@@ -236,7 +241,14 @@ export type UserQuery = (
   )> }
 );
 
-
+export const GroupFragmentDoc = gql`
+    fragment Group on GroupModel {
+  id
+  searchId
+  name
+  iconUrl
+}
+    `;
 export const SaveUserDocument = gql`
     mutation saveUser($user: AddUserDto!) {
   saveUser(user: $user) {
@@ -349,6 +361,7 @@ export type FindGroupQueryResult = Apollo.QueryResult<FindGroupQuery, FindGroupQ
 export const JoinGroupDocument = gql`
     mutation joinGroup($userId: String!, $searchId: String!) {
   joinGroup(userId: $userId, searchId: $searchId) {
+    id
     searchId
   }
 }

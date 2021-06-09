@@ -23,7 +23,6 @@ export const GroupForm = (props: Props) => {
     },
   });
   const [file, setFile] = useState<File>();
-
   const [loading, setLoading] = useState(false);
   const uploadImg = useCallback(
     async (file: File) => {

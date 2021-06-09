@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 import { useContext, useState } from "react";
-import { useSaveGroupMutation } from "src/apollo/graphql";
+import { GroupFragmentDoc, useSaveGroupMutation } from "src/apollo/graphql";
 import { GroupConfirmationForm } from "src/components/GroupConfirmationForm";
 import { GroupSearchForm } from "src/components/GroupSearchForm";
 import { GroupForm } from "src/components/shared/GroupForm";
@@ -15,12 +15,16 @@ export const GroupAddForm = (props: Props) => {
   const [isShowForm, setIsShowForm] = useState(false);
   const [searchId, setSearchId] = useState("");
   const [saveGroup] = useSaveGroupMutation({
-    update(cache, data) {
-      const newData = data.data?.saveGroup;
+    update(cache, { data }) {
+      const newData = data?.saveGroup;
       cache.modify({
         fields: {
           groupsByUser(existing = []) {
-            return [...existing, newData];
+            const newGroupRef = cache.writeFragment({
+              data: newData,
+              fragment: GroupFragmentDoc,
+            });
+            return [...existing, newGroupRef];
           },
         },
       });

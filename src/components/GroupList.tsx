@@ -73,3 +73,12 @@ gql`
     }
   }
 `;
+
+gql`
+  fragment Group on GroupModel {
+    id
+    searchId
+    name
+    iconUrl
+  }
+`;
