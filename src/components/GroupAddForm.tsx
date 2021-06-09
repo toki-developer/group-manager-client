@@ -12,7 +12,7 @@ type Props = {
 
 export const GroupAddForm = (props: Props) => {
   const { user } = useContext(UserContext);
-  const [isShowForm, setIsShowForm] = useState(false);
+  const [isShowConfirmForm, setIsShowConfirmForm] = useState(false);
   const [searchId, setSearchId] = useState("");
   const [saveGroup] = useSaveGroupMutation({
     update(cache, { data }) {
@@ -31,31 +31,33 @@ export const GroupAddForm = (props: Props) => {
     },
   });
   const handleClose = () => {
-    setIsShowForm(false);
+    setIsShowConfirmForm(false);
   };
 
-  const funcSaveGroup = (iconUrl: string, name: string) => {
-    saveGroup({
+  const funcSaveGroup = async (iconUrl: string, name: string) => {
+    await saveGroup({
       variables: { userId: user.id, group: { name, iconUrl } },
     });
   };
 
   return (
     <>
-      <div className="fixed top-0 md:top-28 z-20 p-6 w-full md:max-w-3xl lg:max-w-screen-sm h-full md:h-96 bg-black md:rounded-xl border border-gray-600">
-        <GroupForm
-          onHandleClose={props.onHandleClose}
-          func={funcSaveGroup}
-          title={"グループ作成"}
-        />
-        <div className="mt-8 mb-5 border-b border-gray-800" />
-        <GroupSearchForm
-          onHandleClose={props.onHandleClose}
-          setIsShowForm={setIsShowForm}
-          setSearchId={setSearchId}
-        />
-      </div>
-      {isShowForm && (
+      {!isShowConfirmForm ? (
+        <div className="fixed top-0 md:top-28 z-20 p-6 w-full md:max-w-3xl lg:max-w-screen-sm h-full md:h-96 bg-black md:rounded-xl border border-gray-600">
+          <GroupForm
+            onHandleClose={props.onHandleClose}
+            func={funcSaveGroup}
+            title={"グループ作成"}
+            toastValue={"グループを作成しました"}
+          />
+          <div className="mt-8 mb-5 border-b border-gray-800" />
+          <GroupSearchForm
+            onHandleClose={props.onHandleClose}
+            setIsShowForm={setIsShowConfirmForm}
+            setSearchId={setSearchId}
+          />
+        </div>
+      ) : (
         <GroupConfirmationForm
           onHandleCloseRoot={props.onHandleClose}
           onHandleClose={handleClose}

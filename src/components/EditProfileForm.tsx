@@ -2,6 +2,7 @@ import gql from "graphql-tag";
 import { nanoid } from "nanoid";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import type { AddUserDto } from "src/apollo/graphql";
 import { useSaveUserMutation } from "src/apollo/graphql";
 import { Icon } from "src/components/shared/Icon";
@@ -40,13 +41,18 @@ export const EditProfileForm = () => {
   );
   const handleClick = handleSubmit(async (data) => {
     setLoading(true);
-    const iconUrl = file ? await uploadImg(file) : undefined;
-    const addUserData = {
-      id: user.id,
-      name: data.name,
-      iconUrl: iconUrl ?? user.iconUrl,
-    };
-    saveUser({ variables: { user: addUserData } });
+    try {
+      const iconUrl = file ? await uploadImg(file) : undefined;
+      const addUserData = {
+        id: user.id,
+        name: data.name,
+        iconUrl: iconUrl ?? user.iconUrl,
+      };
+      await saveUser({ variables: { user: addUserData } });
+      toast.success("プロフィールを更新しました");
+    } catch (error) {
+      toast.error("更新に失敗しました");
+    }
     setLoading(false);
   });
   const handleChangeFile = (e: any) => {

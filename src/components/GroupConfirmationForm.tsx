@@ -35,8 +35,10 @@ export const GroupConfirmationForm = (props: Props) => {
   if (error) {
     props.onHandleClose();
   }
-  const funcJoinGroup = () => {
-    joinGroup({ variables: { userId: user.id, searchId: props.searchId } });
+  const funcJoinGroup = async () => {
+    await joinGroup({
+      variables: { userId: user.id, searchId: props.searchId },
+    });
     props.onHandleCloseRoot();
   };
   return (
@@ -47,6 +49,7 @@ export const GroupConfirmationForm = (props: Props) => {
           func={funcJoinGroup}
           groupItem={data?.findGroup}
           title={"参加"}
+          toastValue={"グループに参加しました"}
           noChange
         />
       )}

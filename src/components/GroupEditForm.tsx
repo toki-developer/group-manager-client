@@ -12,8 +12,8 @@ type Props = {
 export const GroupEditForm = (props: Props) => {
   const [updateGroup] = useUpdateGroupMutation();
 
-  const funcUpdateGroup = (iconUrl: string, name: string) => {
-    updateGroup({
+  const funcUpdateGroup = async (iconUrl: string, name: string) => {
+    await updateGroup({
       variables: { group: { id: props.groupItem.id, name, iconUrl } },
     });
   };
@@ -25,6 +25,7 @@ export const GroupEditForm = (props: Props) => {
         func={funcUpdateGroup}
         groupItem={props.groupItem}
         title={"更新"}
+        toastValue={"グループを更新しました"}
       />
       <div className="mt-8 mb-5 border-b border-gray-800" />
       <div className="text-right">
