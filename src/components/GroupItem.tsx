@@ -40,13 +40,7 @@ export const GroupItem = (props: Props) => {
         role="presentation"
       >
         <div className={"flex items-center relative"}>
-          <Icon
-            iconUrl={
-              props.group.iconUrl !== ""
-                ? props.group.iconUrl
-                : "/none_icon.png"
-            }
-          />
+          <Icon iconUrl={props.group.iconUrl} />
           <div className="ml-2">
             {props.group.name}
             <p className="absolute bottom-1 text-xs text-gray-500">

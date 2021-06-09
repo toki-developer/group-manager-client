@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 import { useContext } from "react";
-import { useFindGroupQuery } from "src/apollo/graphql";
+import { GroupFragmentDoc, useFindGroupQuery } from "src/apollo/graphql";
 import { useJoinGroupMutation } from "src/apollo/graphql";
 import { GroupForm } from "src/components/shared/GroupForm";
 import { UserContext } from "src/contexts/UserContext";
@@ -16,12 +16,29 @@ export const GroupConfirmationForm = (props: Props) => {
   const { data, error } = useFindGroupQuery({
     variables: { searchId: props.searchId },
   });
-  const [joinGroup] = useJoinGroupMutation();
+  const [joinGroup] = useJoinGroupMutation({
+    update(cache, { data }) {
+      const newData = data?.joinGroup;
+      cache.modify({
+        fields: {
+          groupsByUser(existing = []) {
+            const newGroupRef = cache.writeFragment({
+              data: newData,
+              fragment: GroupFragmentDoc,
+            });
+            return [...existing, newGroupRef];
+          },
+        },
+      });
+    },
+  });
   if (error) {
     props.onHandleClose();
   }
-  const funcJoinGroup = () => {
-    joinGroup({ variables: { userId: user.id, searchId: props.searchId } });
+  const funcJoinGroup = async () => {
+    await joinGroup({
+      variables: { userId: user.id, searchId: props.searchId },
+    });
     props.onHandleCloseRoot();
   };
   return (
@@ -32,6 +49,7 @@ export const GroupConfirmationForm = (props: Props) => {
           func={funcJoinGroup}
           groupItem={data?.findGroup}
           title={"参加"}
+          toastValue={"グループに参加しました"}
           noChange
         />
       )}
@@ -50,6 +68,7 @@ gql`
 
   mutation joinGroup($userId: String!, $searchId: String!) {
     joinGroup(userId: $userId, searchId: $searchId) {
+      id
       searchId
     }
   }

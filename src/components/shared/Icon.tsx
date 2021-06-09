@@ -10,7 +10,11 @@ export const Icon = (props: Props) => {
   return (
     <div className="inline-block m-2">
       <img
-        src={props.iconUrl}
+        src={
+          props.iconUrl !== "" && props.iconUrl !== undefined
+            ? props.iconUrl
+            : "/none_icon.png"
+        }
         alt="icon"
         className={cc([
           "rounded-full object-cover w-12 h-12",

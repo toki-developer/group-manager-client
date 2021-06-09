@@ -10,7 +10,7 @@ import { UserContext } from "src/contexts/UserContext";
 export const GroupList = () => {
   const [showForm, setShowForm] = useState(false);
   const { user } = useContext(UserContext);
-  const { data, loading, refetch } = useGroupsByUserQuery({
+  const { data, loading } = useGroupsByUserQuery({
     variables: { id: user.id },
     skip: user.id == "",
   });
@@ -24,7 +24,7 @@ export const GroupList = () => {
     <div>
       {showForm ? (
         <>
-          <GroupAddForm onHandleClose={handleClose} refetch={refetch} />
+          <GroupAddForm onHandleClose={handleClose} />
           <div
             className="fixed top-0 left-0 z-10 w-full h-full bg-white opacity-20"
             onClick={handleClose}
@@ -71,5 +71,14 @@ gql`
       name
       iconUrl
     }
+  }
+`;
+
+gql`
+  fragment Group on GroupModel {
+    id
+    searchId
+    name
+    iconUrl
   }
 `;

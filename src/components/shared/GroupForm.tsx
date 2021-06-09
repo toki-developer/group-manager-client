@@ -1,14 +1,16 @@
 import { nanoid } from "nanoid";
 import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import type { AddGroupDto, UpdateGroupDto } from "src/apollo/graphql";
 import { Icon } from "src/components/shared/Icon";
 
 type Props = {
   onHandleClose: () => void;
   groupItem?: UpdateGroupDto;
-  func: (iconUrl: string, name: string) => void;
+  func: (iconUrl: string, name: string) => Promise<void>;
   title: string;
+  toastValue: string;
   noChange?: boolean;
 };
 
@@ -23,7 +25,6 @@ export const GroupForm = (props: Props) => {
     },
   });
   const [file, setFile] = useState<File>();
-
   const [loading, setLoading] = useState(false);
   const uploadImg = useCallback(
     async (file: File) => {
@@ -50,14 +51,19 @@ export const GroupForm = (props: Props) => {
   );
   const handleClick = handleSubmit(async (data) => {
     setLoading(true);
-    const iconUrl = file
-      ? await uploadImg(file)
-      : props.groupItem?.iconUrl
-      ? props.groupItem.iconUrl
-      : "";
+    try {
+      const iconUrl = file
+        ? await uploadImg(file)
+        : props.groupItem?.iconUrl
+        ? props.groupItem.iconUrl
+        : "";
+      await props.func(iconUrl, data.name);
+      props.onHandleClose();
+      toast.success(props.toastValue);
+    } catch (error) {
+      toast.error(`${props.title}に失敗しました`);
+    }
 
-    props.func(iconUrl, data.name);
-    props.onHandleClose();
     setLoading(false);
   });
   const handleChangeFile = (e: any) => {
@@ -90,15 +96,7 @@ export const GroupForm = (props: Props) => {
         {file ? (
           <Icon iconUrl={window.URL.createObjectURL(file)} size="large" />
         ) : (
-          <Icon
-            iconUrl={
-              props.groupItem?.iconUrl !== "" &&
-              props.groupItem?.iconUrl !== undefined
-                ? props.groupItem?.iconUrl
-                : "/none_icon.png"
-            }
-            size="large"
-          />
+          <Icon iconUrl={props.groupItem?.iconUrl} size="large" />
         )}
         {!props.noChange && (
           <label htmlFor="icon" className="ml-7">

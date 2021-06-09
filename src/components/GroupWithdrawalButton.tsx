@@ -1,5 +1,6 @@
 import gql from "graphql-tag";
 import { useContext } from "react";
+import toast from "react-hot-toast";
 import { useWithdrawalGroupMutation } from "src/apollo/graphql";
 import { UserContext } from "src/contexts/UserContext";
 
@@ -9,9 +10,29 @@ type Props = {
 };
 export const GroupWithdrawalButton = (props: Props) => {
   const { user } = useContext(UserContext);
-  const [withdrawalGroup] = useWithdrawalGroupMutation();
-  const handleClick = () => {
-    withdrawalGroup({ variables: { userId: user.id, groupId: props.id } });
+  const [withdrawalGroup] = useWithdrawalGroupMutation({
+    update(cache, data) {
+      cache.modify({
+        fields: {
+          groupsByUser(existing = [], { readField }) {
+            const newGroupList = existing.filter((item: any) => {
+              return readField("id", item) !== data.data?.withdrawalGroup?.id;
+            });
+            return [...newGroupList];
+          },
+        },
+      });
+    },
+  });
+  const handleClick = async () => {
+    try {
+      await withdrawalGroup({
+        variables: { userId: user.id, groupId: props.id },
+      });
+      toast.success("グループを退会しました");
+    } catch (error) {
+      toast.error("退会に失敗しました");
+    }
     props.onHandleClose();
   };
   return (
@@ -25,7 +46,6 @@ gql`
   mutation withdrawalGroup($userId: String!, $groupId: Int!) {
     withdrawalGroup(userId: $userId, groupId: $groupId) {
       id
-      name
     }
   }
 `;
