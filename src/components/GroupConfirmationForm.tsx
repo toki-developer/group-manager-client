@@ -1,3 +1,4 @@
+// import { useApolloClient } from "@apollo/client";
 import gql from "graphql-tag";
 import { useContext } from "react";
 import { GroupFragmentDoc, useFindGroupQuery } from "src/apollo/graphql";
@@ -32,6 +33,15 @@ export const GroupConfirmationForm = (props: Props) => {
       });
     },
   });
+  // const apolloClient = useApolloClient();
+  // useEffect(() => {
+  //   const cacheSameData = apolloClient.readFragment({
+  //     id: apolloClient.cache.identify(data?.findGroup ?? {}),
+  //     fragment: GroupFragmentDoc,
+  //   });
+  //   console.log(cacheSameData);
+  // }, [data, props]);
+
   if (error) {
     props.onHandleClose();
   }
