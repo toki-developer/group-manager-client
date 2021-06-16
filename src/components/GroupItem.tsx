@@ -1,4 +1,6 @@
+import cc from "classcat";
 import { useContext, useState } from "react";
+import toast from "react-hot-toast";
 import type { GroupModel } from "src/apollo/graphql";
 import { GroupEditForm } from "src/components/GroupEditForm";
 import { Icon } from "src/components/shared/Icon";
@@ -6,12 +8,17 @@ import { GroupContext } from "src/contexts/GroupContext";
 
 type Props = {
   group: GroupModel;
+  stateFlg: number;
 };
 
 export const GroupItem = (props: Props) => {
   const { setGroup } = useContext(GroupContext);
   const [showForm, setShowForm] = useState(false);
   const handleGroup = () => {
+    if (props.stateFlg == 0) {
+      toast("参加承認待ち中です。");
+      return;
+    }
     setGroup(props.group);
   };
   const handleClose = () => {
@@ -34,17 +41,27 @@ export const GroupItem = (props: Props) => {
         </>
       ) : null}
       <div
-        className={"flex items-center justify-between"}
+        className="flex justify-between items-center "
         onClick={handleGroup}
         onKeyDown={handleGroup}
         role="presentation"
       >
-        <div className={"flex items-center relative"}>
-          <Icon iconUrl={props.group.iconUrl} />
-          <div className="ml-2">
+        <div className="flex relative flex-auto items-center">
+          <div className={cc([{ "opacity-50": props.stateFlg == 0 }])}>
+            <Icon iconUrl={props.group.iconUrl} />
+          </div>
+          <div
+            className={cc([
+              "ml-2 flex-auto",
+              { "text-gray-500": props.stateFlg == 0 },
+            ])}
+          >
             {props.group.name}
-            <p className="absolute bottom-1 text-xs text-gray-500">
-              id:{props.group.searchId}
+            <p className="flex content-between w-full text-xs text-gray-500">
+              <span className="flex-auto">id:{props.group.searchId}</span>
+              {props.stateFlg == 0 && (
+                <span className="text-gray-400 ">認証待ち</span>
+              )}
             </p>
           </div>
         </div>

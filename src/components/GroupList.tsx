@@ -54,7 +54,7 @@ export const GroupList = () => {
                 key={value?.group.id}
                 className="hover:bg-gray-900 border-b border-gray-900"
               >
-                <GroupItem group={value.group} />
+                <GroupItem group={value.group} stateFlg={value.stateFlg} />
               </li>
             );
           })}

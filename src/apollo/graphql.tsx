@@ -128,6 +128,7 @@ export type UserModel = {
 export type AddGroupByUserDto = {
   userId: Scalars['String'];
   groupId: Scalars['Float'];
+  stateFlg: Scalars['Float'];
 };
 
 export type SaveUserMutationVariables = Exact<{
