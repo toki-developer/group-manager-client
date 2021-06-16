@@ -154,7 +154,7 @@ export type SaveGroupMutation = (
   { __typename?: 'Mutation' }
   & { saveGroup: (
     { __typename?: 'GroupModel' }
-    & Pick<GroupModel, 'id' | 'searchId' | 'name' | 'iconUrl'>
+    & GroupFragment
   ) }
 );
 
@@ -306,13 +306,10 @@ export type SaveUserMutationOptions = Apollo.BaseMutationOptions<SaveUserMutatio
 export const SaveGroupDocument = gql`
     mutation saveGroup($userId: String!, $group: AddGroupDto!) {
   saveGroup(userId: $userId, group: $group) {
-    id
-    searchId
-    name
-    iconUrl
+    ...Group
   }
 }
-    `;
+    ${GroupFragmentDoc}`;
 export type SaveGroupMutationFn = Apollo.MutationFunction<SaveGroupMutation, SaveGroupMutationVariables>;
 
 /**

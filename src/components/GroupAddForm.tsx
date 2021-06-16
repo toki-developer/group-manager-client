@@ -81,10 +81,7 @@ export const GroupAddForm = (props: Props) => {
 gql`
   mutation saveGroup($userId: String!, $group: AddGroupDto!) {
     saveGroup(userId: $userId, group: $group) {
-      id
-      searchId
-      name
-      iconUrl
+      ...Group
     }
   }
 `;

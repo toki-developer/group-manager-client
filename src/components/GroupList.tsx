@@ -48,7 +48,7 @@ export const GroupList = () => {
           </div>
         </li>
         {data &&
-          data?.groupsByUser?.map((value: MembershipGroupFragment) => {
+          data.groupsByUser?.map((value: MembershipGroupFragment) => {
             return (
               <li
                 key={value?.group.id}
@@ -72,19 +72,19 @@ gql`
 `;
 
 gql`
-  fragment Group on GroupModel {
-    id
-    searchId
-    name
-    iconUrl
-  }
-`;
-
-gql`
   fragment MembershipGroup on MembershipModel {
     stateFlg
     group {
       ...Group
     }
+  }
+`;
+
+gql`
+  fragment Group on GroupModel {
+    id
+    searchId
+    name
+    iconUrl
   }
 `;
