@@ -26,10 +26,15 @@ export const GroupAddForm = (props: Props) => {
             });
             const newGroupData = {
               __typename: "MembershipModel",
-              stateFlg: 0,
+              stateFlg: 1,
               group: newGroupRef,
             };
-            return [...existing, newGroupData];
+            const groupList = [...existing, newGroupData];
+            groupList.sort((i, j) => {
+              if (i.stateFlg > j.stateFlg) return -1;
+              return 0;
+            });
+            return groupList;
           },
         },
       });
