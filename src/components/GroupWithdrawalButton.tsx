@@ -1,6 +1,7 @@
 import gql from "graphql-tag";
 import { useContext } from "react";
 import toast from "react-hot-toast";
+import type { MembershipGroupFragment } from "src/apollo/graphql";
 import { useWithdrawalGroupMutation } from "src/apollo/graphql";
 import { UserContext } from "src/contexts/UserContext";
 
@@ -15,9 +16,13 @@ export const GroupWithdrawalButton = (props: Props) => {
       cache.modify({
         fields: {
           groupsByUser(existing = [], { readField }) {
-            const newGroupList = existing.filter((item: any) => {
-              return readField("id", item) !== data.data?.withdrawalGroup?.id;
-            });
+            const newGroupList = existing.filter(
+              (item: MembershipGroupFragment) => {
+                return (
+                  readField("id", item.group) !== data.data?.withdrawalGroup?.id
+                );
+              }
+            );
             return [...newGroupList];
           },
         },

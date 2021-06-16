@@ -27,20 +27,17 @@ export const GroupConfirmationForm = (props: Props) => {
               data: newData,
               fragment: GroupFragmentDoc,
             });
-            return [...existing, newGroupRef];
+            const newGroupData = {
+              __typename: "MembershipModel",
+              stateFlg: 0,
+              group: newGroupRef,
+            };
+            return [...existing, newGroupData];
           },
         },
       });
     },
   });
-  // const apolloClient = useApolloClient();
-  // useEffect(() => {
-  //   const cacheSameData = apolloClient.readFragment({
-  //     id: apolloClient.cache.identify(data?.findGroup ?? {}),
-  //     fragment: GroupFragmentDoc,
-  //   });
-  //   console.log(cacheSameData);
-  // }, [data, props]);
 
   if (error) {
     props.onHandleClose();
@@ -75,7 +72,6 @@ gql`
       iconUrl
     }
   }
-
   mutation joinGroup($userId: String!, $searchId: String!) {
     joinGroup(userId: $userId, searchId: $searchId) {
       id

@@ -24,7 +24,12 @@ export const GroupAddForm = (props: Props) => {
               data: newData,
               fragment: GroupFragmentDoc,
             });
-            return [...existing, newGroupRef];
+            const newGroupData = {
+              __typename: "MembershipModel",
+              stateFlg: 0,
+              group: newGroupRef,
+            };
+            return [...existing, newGroupData];
           },
         },
       });
