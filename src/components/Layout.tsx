@@ -1,6 +1,8 @@
 import { useRouter } from "next/dist/client/router";
 import type { ReactNode } from "react";
+import { useEffect } from "react";
 import { useContext } from "react";
+import toast from "react-hot-toast";
 import { FixedMenu } from "src/components/FixedMenu";
 import { Login } from "src/components/Login";
 import { SideMenu } from "src/components/SideMenu";
@@ -9,14 +11,18 @@ import { UserContext } from "src/contexts/UserContext";
 export const Layout = (props: { children: ReactNode }) => {
   const { user, loading } = useContext(UserContext);
   const router = useRouter();
-  if (
-    user.name == "" &&
-    router.pathname !== "/mypage" &&
-    !loading &&
-    user.id !== ""
-  ) {
-    router.push("/mypage");
-  }
+  useEffect(() => {
+    if (
+      user.name == "" &&
+      router.pathname !== "/mypage" &&
+      !loading &&
+      user.id !== ""
+    ) {
+      toast("プロフィールを入力してください");
+      router.push("/mypage");
+    }
+  }, [router, loading, user]);
+
   return (
     <div className="min-h-screen bg-black">
       <div className="lg:grid lg:grid-cols-12 mx-auto max-w-3xl lg:max-w-6xl">

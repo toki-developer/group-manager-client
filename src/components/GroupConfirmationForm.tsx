@@ -1,3 +1,4 @@
+// import { useApolloClient } from "@apollo/client";
 import gql from "graphql-tag";
 import { useContext } from "react";
 import { GroupFragmentDoc, useFindGroupQuery } from "src/apollo/graphql";
@@ -26,12 +27,18 @@ export const GroupConfirmationForm = (props: Props) => {
               data: newData,
               fragment: GroupFragmentDoc,
             });
-            return [...existing, newGroupRef];
+            const newGroupData = {
+              __typename: "MembershipModel",
+              stateFlg: 0,
+              group: newGroupRef,
+            };
+            return [...existing, newGroupData];
           },
         },
       });
     },
   });
+
   if (error) {
     props.onHandleClose();
   }
@@ -65,7 +72,6 @@ gql`
       iconUrl
     }
   }
-
   mutation joinGroup($userId: String!, $searchId: String!) {
     joinGroup(userId: $userId, searchId: $searchId) {
       id

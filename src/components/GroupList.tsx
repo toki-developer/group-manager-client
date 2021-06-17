@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 import { useContext, useState } from "react";
-import type { GroupModel } from "src/apollo/graphql";
+import type { MembershipGroupFragment } from "src/apollo/graphql";
 import { useGroupsByUserQuery } from "src/apollo/graphql";
 import { GroupAddForm } from "src/components/GroupAddForm";
 import { GroupItem } from "src/components/GroupItem";
@@ -10,7 +10,7 @@ import { UserContext } from "src/contexts/UserContext";
 export const GroupList = () => {
   const [showForm, setShowForm] = useState(false);
   const { user } = useContext(UserContext);
-  const { data, loading } = useGroupsByUserQuery({
+  const { data } = useGroupsByUserQuery({
     variables: { id: user.id },
     skip: user.id == "",
   });
@@ -47,14 +47,14 @@ export const GroupList = () => {
             </div>
           </div>
         </li>
-        {!loading &&
-          data?.groupsByUser?.map((value: GroupModel) => {
+        {data &&
+          data.groupsByUser?.map((value: MembershipGroupFragment) => {
             return (
               <li
-                key={value?.id}
+                key={value?.group.id}
                 className="hover:bg-gray-900 border-b border-gray-900"
               >
-                <GroupItem group={value} />
+                <GroupItem group={value.group} stateFlg={value.stateFlg} />
               </li>
             );
           })}
@@ -66,10 +66,16 @@ export const GroupList = () => {
 gql`
   query groupsByUser($id: String!) {
     groupsByUser(id: $id) {
-      id
-      searchId
-      name
-      iconUrl
+      ...MembershipGroup
+    }
+  }
+`;
+
+gql`
+  fragment MembershipGroup on MembershipModel {
+    stateFlg
+    group {
+      ...Group
     }
   }
 `;

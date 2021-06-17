@@ -24,7 +24,17 @@ export const GroupAddForm = (props: Props) => {
               data: newData,
               fragment: GroupFragmentDoc,
             });
-            return [...existing, newGroupRef];
+            const newGroupData = {
+              __typename: "MembershipModel",
+              stateFlg: 1,
+              group: newGroupRef,
+            };
+            const groupList = [...existing, newGroupData];
+            groupList.sort((i, j) => {
+              if (i.stateFlg > j.stateFlg) return -1;
+              return 0;
+            });
+            return groupList;
           },
         },
       });
@@ -71,10 +81,7 @@ export const GroupAddForm = (props: Props) => {
 gql`
   mutation saveGroup($userId: String!, $group: AddGroupDto!) {
     saveGroup(userId: $userId, group: $group) {
-      id
-      searchId
-      name
-      iconUrl
+      ...Group
     }
   }
 `;

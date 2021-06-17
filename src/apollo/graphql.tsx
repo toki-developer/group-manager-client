@@ -38,6 +38,13 @@ export type GroupModel = {
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
+export type MembershipModel = {
+  __typename?: 'MembershipModel';
+  stateFlg: Scalars['Float'];
+  user: UserModel;
+  group: GroupModel;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   saveUser: UserModel;
@@ -84,8 +91,7 @@ export type MutationUpdateGroupArgs = {
 export type Query = {
   __typename?: 'Query';
   user?: Maybe<UserModel>;
-  groupsByUser?: Maybe<Array<GroupModel>>;
-  usersByGroup?: Maybe<Array<UserModel>>;
+  groupsByUser?: Maybe<Array<MembershipModel>>;
   findGroup: GroupModel;
 };
 
@@ -97,11 +103,6 @@ export type QueryUserArgs = {
 
 export type QueryGroupsByUserArgs = {
   id: Scalars['String'];
-};
-
-
-export type QueryUsersByGroupArgs = {
-  id: Scalars['Int'];
 };
 
 
@@ -127,6 +128,7 @@ export type UserModel = {
 export type AddGroupByUserDto = {
   userId: Scalars['String'];
   groupId: Scalars['Float'];
+  stateFlg: Scalars['Float'];
 };
 
 export type SaveUserMutationVariables = Exact<{
@@ -152,7 +154,7 @@ export type SaveGroupMutation = (
   { __typename?: 'Mutation' }
   & { saveGroup: (
     { __typename?: 'GroupModel' }
-    & Pick<GroupModel, 'id' | 'searchId' | 'name' | 'iconUrl'>
+    & GroupFragment
   ) }
 );
 
@@ -204,14 +206,23 @@ export type GroupsByUserQueryVariables = Exact<{
 export type GroupsByUserQuery = (
   { __typename?: 'Query' }
   & { groupsByUser?: Maybe<Array<(
-    { __typename?: 'GroupModel' }
-    & Pick<GroupModel, 'id' | 'searchId' | 'name' | 'iconUrl'>
+    { __typename?: 'MembershipModel' }
+    & MembershipGroupFragment
   )>> }
 );
 
 export type GroupFragment = (
   { __typename?: 'GroupModel' }
   & Pick<GroupModel, 'id' | 'searchId' | 'name' | 'iconUrl'>
+);
+
+export type MembershipGroupFragment = (
+  { __typename?: 'MembershipModel' }
+  & Pick<MembershipModel, 'stateFlg'>
+  & { group: (
+    { __typename?: 'GroupModel' }
+    & GroupFragment
+  ) }
 );
 
 export type WithdrawalGroupMutationVariables = Exact<{
@@ -249,6 +260,14 @@ export const GroupFragmentDoc = gql`
   iconUrl
 }
     `;
+export const MembershipGroupFragmentDoc = gql`
+    fragment MembershipGroup on MembershipModel {
+  stateFlg
+  group {
+    ...Group
+  }
+}
+    ${GroupFragmentDoc}`;
 export const SaveUserDocument = gql`
     mutation saveUser($user: AddUserDto!) {
   saveUser(user: $user) {
@@ -287,13 +306,10 @@ export type SaveUserMutationOptions = Apollo.BaseMutationOptions<SaveUserMutatio
 export const SaveGroupDocument = gql`
     mutation saveGroup($userId: String!, $group: AddGroupDto!) {
   saveGroup(userId: $userId, group: $group) {
-    id
-    searchId
-    name
-    iconUrl
+    ...Group
   }
 }
-    `;
+    ${GroupFragmentDoc}`;
 export type SaveGroupMutationFn = Apollo.MutationFunction<SaveGroupMutation, SaveGroupMutationVariables>;
 
 /**
@@ -431,13 +447,10 @@ export type UpdateGroupMutationOptions = Apollo.BaseMutationOptions<UpdateGroupM
 export const GroupsByUserDocument = gql`
     query groupsByUser($id: String!) {
   groupsByUser(id: $id) {
-    id
-    searchId
-    name
-    iconUrl
+    ...MembershipGroup
   }
 }
-    `;
+    ${MembershipGroupFragmentDoc}`;
 
 /**
  * __useGroupsByUserQuery__

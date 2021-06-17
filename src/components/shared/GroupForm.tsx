@@ -63,7 +63,6 @@ export const GroupForm = (props: Props) => {
     } catch (error) {
       toast.error(`${props.title}に失敗しました`);
     }
-
     setLoading(false);
   });
   const handleChangeFile = (e: any) => {
