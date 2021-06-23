@@ -71,7 +71,7 @@ const UserItem = (props: MembershipUserFragment) => {
         <span className={cc([{ "text-gray-500": props.stateFlg == 0 }])}>
           {props.user.name}
         </span>
-        {props.stateFlg == 0 && <button>承認する</button>}
+        {props.stateFlg == 0 && <button className="text-sm">承認</button>}
       </div>
     </div>
   );
