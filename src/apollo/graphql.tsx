@@ -92,6 +92,7 @@ export type Query = {
   __typename?: 'Query';
   user?: Maybe<UserModel>;
   groupsByUser?: Maybe<Array<MembershipModel>>;
+  usersByGroup?: Maybe<Array<MembershipModel>>;
   findGroup: GroupModel;
 };
 
@@ -103,6 +104,11 @@ export type QueryUserArgs = {
 
 export type QueryGroupsByUserArgs = {
   id: Scalars['String'];
+};
+
+
+export type QueryUsersByGroupArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -198,6 +204,37 @@ export type UpdateGroupMutation = (
   ) }
 );
 
+export type UsersByGroupQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type UsersByGroupQuery = (
+  { __typename?: 'Query' }
+  & { usersByGroup?: Maybe<Array<(
+    { __typename?: 'MembershipModel' }
+    & Pick<MembershipModel, 'stateFlg'>
+    & { user: (
+      { __typename?: 'UserModel' }
+      & UserFragment
+    ) }
+  )>> }
+);
+
+export type MembershipUserFragment = (
+  { __typename?: 'MembershipModel' }
+  & Pick<MembershipModel, 'stateFlg'>
+  & { user: (
+    { __typename?: 'UserModel' }
+    & UserFragment
+  ) }
+);
+
+export type UserFragment = (
+  { __typename?: 'UserModel' }
+  & Pick<UserModel, 'id' | 'name' | 'iconUrl'>
+);
+
 export type GroupsByUserQueryVariables = Exact<{
   id: Scalars['String'];
 }>;
@@ -211,11 +248,6 @@ export type GroupsByUserQuery = (
   )>> }
 );
 
-export type GroupFragment = (
-  { __typename?: 'GroupModel' }
-  & Pick<GroupModel, 'id' | 'searchId' | 'name' | 'iconUrl'>
-);
-
 export type MembershipGroupFragment = (
   { __typename?: 'MembershipModel' }
   & Pick<MembershipModel, 'stateFlg'>
@@ -223,6 +255,11 @@ export type MembershipGroupFragment = (
     { __typename?: 'GroupModel' }
     & GroupFragment
   ) }
+);
+
+export type GroupFragment = (
+  { __typename?: 'GroupModel' }
+  & Pick<GroupModel, 'id' | 'searchId' | 'name' | 'iconUrl'>
 );
 
 export type WithdrawalGroupMutationVariables = Exact<{
@@ -252,6 +289,21 @@ export type UserQuery = (
   )> }
 );
 
+export const UserFragmentDoc = gql`
+    fragment User on UserModel {
+  id
+  name
+  iconUrl
+}
+    `;
+export const MembershipUserFragmentDoc = gql`
+    fragment MembershipUser on MembershipModel {
+  stateFlg
+  user {
+    ...User
+  }
+}
+    ${UserFragmentDoc}`;
 export const GroupFragmentDoc = gql`
     fragment Group on GroupModel {
   id
@@ -444,6 +496,44 @@ export function useUpdateGroupMutation(baseOptions?: Apollo.MutationHookOptions<
 export type UpdateGroupMutationHookResult = ReturnType<typeof useUpdateGroupMutation>;
 export type UpdateGroupMutationResult = Apollo.MutationResult<UpdateGroupMutation>;
 export type UpdateGroupMutationOptions = Apollo.BaseMutationOptions<UpdateGroupMutation, UpdateGroupMutationVariables>;
+export const UsersByGroupDocument = gql`
+    query usersByGroup($id: Int!) {
+  usersByGroup(id: $id) {
+    user {
+      ...User
+    }
+    stateFlg
+  }
+}
+    ${UserFragmentDoc}`;
+
+/**
+ * __useUsersByGroupQuery__
+ *
+ * To run a query within a React component, call `useUsersByGroupQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUsersByGroupQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUsersByGroupQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useUsersByGroupQuery(baseOptions: Apollo.QueryHookOptions<UsersByGroupQuery, UsersByGroupQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UsersByGroupQuery, UsersByGroupQueryVariables>(UsersByGroupDocument, options);
+      }
+export function useUsersByGroupLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UsersByGroupQuery, UsersByGroupQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UsersByGroupQuery, UsersByGroupQueryVariables>(UsersByGroupDocument, options);
+        }
+export type UsersByGroupQueryHookResult = ReturnType<typeof useUsersByGroupQuery>;
+export type UsersByGroupLazyQueryHookResult = ReturnType<typeof useUsersByGroupLazyQuery>;
+export type UsersByGroupQueryResult = Apollo.QueryResult<UsersByGroupQuery, UsersByGroupQueryVariables>;
 export const GroupsByUserDocument = gql`
     query groupsByUser($id: String!) {
   groupsByUser(id: $id) {
