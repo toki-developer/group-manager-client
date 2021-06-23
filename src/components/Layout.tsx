@@ -29,7 +29,7 @@ export const Layout = (props: { children: ReactNode }) => {
         <div className="hidden lg:block col-span-3 text-gray-300">
           <SideMenu />
         </div>
-        <div className="lg:col-span-9 min-h-screen text-white border-r border-l border-gray-600">
+        <div className="lg:col-span-9 text-white border-r border-l border-gray-600">
           {loading && (
             <div className="flex fixed justify-center items-center w-full h-screen">
               <svg
