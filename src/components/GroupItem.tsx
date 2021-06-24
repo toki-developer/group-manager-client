@@ -3,6 +3,7 @@ import { useContext, useState } from "react";
 import toast from "react-hot-toast";
 import type { GroupModel } from "src/apollo/graphql";
 import { GroupEditForm } from "src/components/GroupEditForm";
+import { GroupWithdrawalButton } from "src/components/GroupWithdrawalButton";
 import { Icon } from "src/components/shared/Icon";
 import { GroupContext } from "src/contexts/GroupContext";
 
@@ -40,13 +41,13 @@ export const GroupItem = (props: Props) => {
           />
         </>
       ) : null}
-      <div
-        className="flex justify-between items-center "
-        onClick={handleGroup}
-        onKeyDown={handleGroup}
-        role="presentation"
-      >
-        <div className="flex relative flex-auto items-center">
+      <div className="flex justify-between items-center ">
+        <div
+          className="flex relative flex-auto items-center"
+          onClick={handleGroup}
+          onKeyDown={handleGroup}
+          role="presentation"
+        >
           <div className={cc([{ "opacity-50": props.stateFlg == 0 }])}>
             <Icon iconUrl={props.group.iconUrl} />
           </div>
@@ -65,26 +66,33 @@ export const GroupItem = (props: Props) => {
             </p>
           </div>
         </div>
-        <div
-          onClick={handleEditGroup}
-          onKeyDown={handleEditGroup}
-          role="presentation"
-        >
-          <svg
-            className="flex-shrink-0 mr-4 ml-7 w-7 h-7 text-gray-300"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            aria-hidden="true"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-            />
-          </svg>
+
+        <div className="w-14 text-center">
+          {props.stateFlg == 1 ? (
+            <div
+              onClick={handleEditGroup}
+              onKeyDown={handleEditGroup}
+              role="presentation"
+            >
+              <svg
+                className="flex-shrink-0 m-auto w-7 h-7 text-gray-300"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                />
+              </svg>
+            </div>
+          ) : (
+            <GroupWithdrawalButton title="取消" id={props.group.id} />
+          )}
         </div>
       </div>
     </>

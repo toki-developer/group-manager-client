@@ -6,8 +6,9 @@ import { useWithdrawalGroupMutation } from "src/apollo/graphql";
 import { UserContext } from "src/contexts/UserContext";
 
 type Props = {
+  title: string;
   id: number;
-  onHandleClose: () => void;
+  onHandleClose?: () => void;
 };
 export const GroupWithdrawalButton = (props: Props) => {
   const { user } = useContext(UserContext);
@@ -34,15 +35,15 @@ export const GroupWithdrawalButton = (props: Props) => {
       await withdrawalGroup({
         variables: { userId: user.id, groupId: props.id },
       });
-      toast.success("グループを退会しました");
+      toast.success(`グループを${props.title}しました`);
     } catch (error) {
-      toast.error("退会に失敗しました");
+      toast.error(`${props.title}に失敗しました`);
     }
-    props.onHandleClose();
+    if (props.onHandleClose) props.onHandleClose();
   };
   return (
-    <button className="text-green-500" onClick={handleClick}>
-      退会する
+    <button className="focus:outline-none" onClick={handleClick}>
+      {props.title}
     </button>
   );
 };

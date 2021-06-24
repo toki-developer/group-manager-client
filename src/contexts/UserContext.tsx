@@ -24,6 +24,7 @@ export const UserContextProvider: VFC<{ children: ReactNode }> = (props) => {
     name: "",
     iconUrl: "",
   });
+
   const { user } = useUser();
   const { data, loading } = useUserQuery({
     variables: {

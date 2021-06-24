@@ -29,7 +29,7 @@ export const Layout = (props: { children: ReactNode }) => {
         <div className="hidden lg:block col-span-3 text-gray-300">
           <SideMenu />
         </div>
-        <div className="lg:col-span-9 text-white border-r border-l border-gray-600">
+        <div className="lg:col-span-9 min-h-screen text-white border-r border-l border-gray-600">
           {loading && (
             <div className="flex fixed justify-center items-center w-full h-screen">
               <svg
@@ -48,11 +48,11 @@ export const Layout = (props: { children: ReactNode }) => {
           )}
           {user.id == "" && !loading && <Login />}
           {!loading && props.children}
+          <div className="lg:hidden h-14 md:h-16" />
         </div>
         <div className="lg:hidden fixed bottom-0 w-full max-w-3xl h-14 md:h-16 text-gray-300 bg-black border-t border-r border-l border-gray-600">
           <FixedMenu />
         </div>
-        <div className="lg:hidden h-14 md:h-16"></div>
       </div>
     </div>
   );
