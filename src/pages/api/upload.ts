@@ -1,3 +1,4 @@
+/* eslint-disable import/no-default-export */
 import { Storage } from "@google-cloud/storage";
 
 export default async function handler(req: any, res: any) {

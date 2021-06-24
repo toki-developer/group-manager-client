@@ -1,3 +1,4 @@
+/* eslint-disable import/no-default-export */
 import { handleAuth, handleCallback } from "@auth0/nextjs-auth0";
 
 const afterCallback = (req: any, res: any, session: any, state: any) => {
