@@ -30,7 +30,7 @@ export type AddUserDto = {
 
 export type GroupModel = {
   __typename?: 'GroupModel';
-  id: Scalars['Int'];
+  id: Scalars['String'];
   searchId: Scalars['String'];
   name: Scalars['String'];
   iconUrl: Scalars['String'];
@@ -74,13 +74,13 @@ export type MutationJoinGroupArgs = {
 
 
 export type MutationAllowParticipationArgs = {
-  groupId: Scalars['Int'];
+  groupId: Scalars['String'];
   userId: Scalars['String'];
 };
 
 
 export type MutationWithdrawalGroupArgs = {
-  groupId: Scalars['Int'];
+  groupId: Scalars['String'];
   userId: Scalars['String'];
 };
 
@@ -115,7 +115,7 @@ export type QueryGroupsByUserArgs = {
 
 
 export type QueryUsersByGroupArgs = {
-  id: Scalars['Int'];
+  id: Scalars['String'];
 };
 
 
@@ -124,7 +124,7 @@ export type QueryFindGroupArgs = {
 };
 
 export type UpdateGroupDto = {
-  id: Scalars['Float'];
+  id: Scalars['String'];
   name: Scalars['String'];
   iconUrl: Scalars['String'];
 };
@@ -140,7 +140,7 @@ export type UserModel = {
 
 export type AddGroupByUserDto = {
   userId: Scalars['String'];
-  groupId: Scalars['Float'];
+  groupId: Scalars['String'];
   stateFlg: Scalars['Float'];
 };
 
@@ -211,22 +211,8 @@ export type UpdateGroupMutation = (
   ) }
 );
 
-export type AllowParticipationMutationVariables = Exact<{
-  userId: Scalars['String'];
-  groupId: Scalars['Int'];
-}>;
-
-
-export type AllowParticipationMutation = (
-  { __typename?: 'Mutation' }
-  & { allowParticipation?: Maybe<(
-    { __typename?: 'UserModel' }
-    & Pick<UserModel, 'id'>
-  )> }
-);
-
 export type UsersByGroupQueryVariables = Exact<{
-  id: Scalars['Int'];
+  id: Scalars['String'];
 }>;
 
 
@@ -285,7 +271,7 @@ export type GroupFragment = (
 
 export type WithdrawalGroupMutationVariables = Exact<{
   userId: Scalars['String'];
-  groupId: Scalars['Int'];
+  groupId: Scalars['String'];
 }>;
 
 
@@ -294,6 +280,20 @@ export type WithdrawalGroupMutation = (
   & { withdrawalGroup?: Maybe<(
     { __typename?: 'GroupModel' }
     & Pick<GroupModel, 'id'>
+  )> }
+);
+
+export type AllowParticipationMutationVariables = Exact<{
+  userId: Scalars['String'];
+  groupId: Scalars['String'];
+}>;
+
+
+export type AllowParticipationMutation = (
+  { __typename?: 'Mutation' }
+  & { allowParticipation?: Maybe<(
+    { __typename?: 'UserModel' }
+    & Pick<UserModel, 'id'>
   )> }
 );
 
@@ -517,42 +517,8 @@ export function useUpdateGroupMutation(baseOptions?: Apollo.MutationHookOptions<
 export type UpdateGroupMutationHookResult = ReturnType<typeof useUpdateGroupMutation>;
 export type UpdateGroupMutationResult = Apollo.MutationResult<UpdateGroupMutation>;
 export type UpdateGroupMutationOptions = Apollo.BaseMutationOptions<UpdateGroupMutation, UpdateGroupMutationVariables>;
-export const AllowParticipationDocument = gql`
-    mutation allowParticipation($userId: String!, $groupId: Int!) {
-  allowParticipation(userId: $userId, groupId: $groupId) {
-    id
-  }
-}
-    `;
-export type AllowParticipationMutationFn = Apollo.MutationFunction<AllowParticipationMutation, AllowParticipationMutationVariables>;
-
-/**
- * __useAllowParticipationMutation__
- *
- * To run a mutation, you first call `useAllowParticipationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAllowParticipationMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [allowParticipationMutation, { data, loading, error }] = useAllowParticipationMutation({
- *   variables: {
- *      userId: // value for 'userId'
- *      groupId: // value for 'groupId'
- *   },
- * });
- */
-export function useAllowParticipationMutation(baseOptions?: Apollo.MutationHookOptions<AllowParticipationMutation, AllowParticipationMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<AllowParticipationMutation, AllowParticipationMutationVariables>(AllowParticipationDocument, options);
-      }
-export type AllowParticipationMutationHookResult = ReturnType<typeof useAllowParticipationMutation>;
-export type AllowParticipationMutationResult = Apollo.MutationResult<AllowParticipationMutation>;
-export type AllowParticipationMutationOptions = Apollo.BaseMutationOptions<AllowParticipationMutation, AllowParticipationMutationVariables>;
 export const UsersByGroupDocument = gql`
-    query usersByGroup($id: Int!) {
+    query usersByGroup($id: String!) {
   usersByGroup(id: $id) {
     user {
       ...User
@@ -625,7 +591,7 @@ export type GroupsByUserQueryHookResult = ReturnType<typeof useGroupsByUserQuery
 export type GroupsByUserLazyQueryHookResult = ReturnType<typeof useGroupsByUserLazyQuery>;
 export type GroupsByUserQueryResult = Apollo.QueryResult<GroupsByUserQuery, GroupsByUserQueryVariables>;
 export const WithdrawalGroupDocument = gql`
-    mutation withdrawalGroup($userId: String!, $groupId: Int!) {
+    mutation withdrawalGroup($userId: String!, $groupId: String!) {
   withdrawalGroup(userId: $userId, groupId: $groupId) {
     id
   }
@@ -658,6 +624,40 @@ export function useWithdrawalGroupMutation(baseOptions?: Apollo.MutationHookOpti
 export type WithdrawalGroupMutationHookResult = ReturnType<typeof useWithdrawalGroupMutation>;
 export type WithdrawalGroupMutationResult = Apollo.MutationResult<WithdrawalGroupMutation>;
 export type WithdrawalGroupMutationOptions = Apollo.BaseMutationOptions<WithdrawalGroupMutation, WithdrawalGroupMutationVariables>;
+export const AllowParticipationDocument = gql`
+    mutation allowParticipation($userId: String!, $groupId: String!) {
+  allowParticipation(userId: $userId, groupId: $groupId) {
+    id
+  }
+}
+    `;
+export type AllowParticipationMutationFn = Apollo.MutationFunction<AllowParticipationMutation, AllowParticipationMutationVariables>;
+
+/**
+ * __useAllowParticipationMutation__
+ *
+ * To run a mutation, you first call `useAllowParticipationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAllowParticipationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [allowParticipationMutation, { data, loading, error }] = useAllowParticipationMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      groupId: // value for 'groupId'
+ *   },
+ * });
+ */
+export function useAllowParticipationMutation(baseOptions?: Apollo.MutationHookOptions<AllowParticipationMutation, AllowParticipationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AllowParticipationMutation, AllowParticipationMutationVariables>(AllowParticipationDocument, options);
+      }
+export type AllowParticipationMutationHookResult = ReturnType<typeof useAllowParticipationMutation>;
+export type AllowParticipationMutationResult = Apollo.MutationResult<AllowParticipationMutation>;
+export type AllowParticipationMutationOptions = Apollo.BaseMutationOptions<AllowParticipationMutation, AllowParticipationMutationVariables>;
 export const UserDocument = gql`
     query user($id: String!) {
   user(id: $id) {

@@ -1,5 +1,5 @@
 import type { Dispatch, ReactNode, SetStateAction, VFC } from "react";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useState } from "react";
 import type { GroupModel } from "src/apollo/graphql";
 
 type Context = {
@@ -9,7 +9,7 @@ type Context = {
 
 export const GroupContext = createContext<Context>({
   group: {
-    id: 0,
+    id: "",
     searchId: "",
     name: "",
     iconUrl: "",
@@ -23,17 +23,6 @@ export const GroupContext = createContext<Context>({
 
 export const GroupContextProvider: VFC<{ children: ReactNode }> = (props) => {
   const [group, setGroup] = useState<GroupModel | null>(null);
-  useEffect(() => {
-    setGroup({
-      id: 0,
-      searchId: "",
-      name: "",
-      iconUrl: "",
-      createdAt: "",
-      updatedAt: "",
-    });
-  }, []);
-
   const value = {
     group,
     setGroup,

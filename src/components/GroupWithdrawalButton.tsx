@@ -7,7 +7,7 @@ import { UserContext } from "src/contexts/UserContext";
 
 type Props = {
   title: string;
-  id: number;
+  id: string;
   onHandleClose?: () => void;
 };
 export const GroupWithdrawalButton = (props: Props) => {
@@ -49,7 +49,7 @@ export const GroupWithdrawalButton = (props: Props) => {
 };
 
 gql`
-  mutation withdrawalGroup($userId: String!, $groupId: Int!) {
+  mutation withdrawalGroup($userId: String!, $groupId: String!) {
     withdrawalGroup(userId: $userId, groupId: $groupId) {
       id
     }

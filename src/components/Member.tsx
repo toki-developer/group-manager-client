@@ -6,7 +6,7 @@ import { useAllowParticipationMutation } from "src/apollo/graphql";
 import { Icon } from "src/components/shared/Icon";
 
 type Props = {
-  groupId: number;
+  groupId: string;
   member: MembershipUserFragment;
 };
 
@@ -61,7 +61,7 @@ export const Member = (props: Props) => {
 };
 
 gql`
-  mutation allowParticipation($userId: String!, $groupId: Int!) {
+  mutation allowParticipation($userId: String!, $groupId: String!) {
     allowParticipation(userId: $userId, groupId: $groupId) {
       id
     }

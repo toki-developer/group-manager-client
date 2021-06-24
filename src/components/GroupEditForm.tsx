@@ -74,7 +74,7 @@ gql`
 `;
 
 gql`
-  query usersByGroup($id: Int!) {
+  query usersByGroup($id: String!) {
     usersByGroup(id: $id) {
       user {
         ...User
