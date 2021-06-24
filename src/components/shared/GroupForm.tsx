@@ -114,13 +114,15 @@ export const GroupForm = (props: Props) => {
           </label>
         )}
       </div>
-      <div className="flex flex-col md:flex-row justify-between ">
+      <div className="flex flex-col md:flex-row justify-between">
         <label>
-          <div className="border-b border-gray-500">
-            <span className="mr-2 text-sm text-gray-300">グループ名</span>
+          <div className="flex border-b border-gray-500">
+            <span className="m-auto mr-2 text-sm text-gray-300 align-middle ">
+              グループ名
+            </span>
             <input
               {...register("name", { required: true })}
-              className="p-2 bg-black outline-none"
+              className="flex-auto p-2 bg-black outline-none"
               placeholder="グループ名を入力"
               readOnly={props.noChange}
             />

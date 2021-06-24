@@ -84,11 +84,11 @@ export const EditProfileForm = () => {
       </div>
       <div className="flex flex-col md:flex-row justify-between ">
         <label>
-          <div className="border-b border-gray-500">
-            <span className="mr-2 text-sm text-gray-300">名前</span>
+          <div className="flex border-b border-gray-500">
+            <span className="m-auto mr-2 text-sm text-gray-300 ">名前</span>
             <input
               {...register("name", { required: true })}
-              className="p-2 bg-black outline-none"
+              className="flex-auto p-2 bg-black outline-none"
               placeholder="名前を入力"
             />
           </div>
